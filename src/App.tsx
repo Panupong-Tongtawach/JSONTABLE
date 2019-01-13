@@ -1,14 +1,14 @@
 import React, { Component, ReactElement } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { DataTypes } from './dataTypes';
+import { object } from 'prop-types';
 
 class App extends Component {
   render() {
-
-    const input: any = [
+    const input: DataTypes.Data[] = [
       { "level": "info", "ts": 1547306559.829222, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:62", "msg": "Fetch questions success", "count": 165 },
       { "level": "info", "ts": 1547306565.250088, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 2, "trainingPhrase": "กองถ่ายขอเข้าถ่ายทำโมษณา กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
-      { "level": "info", "ts": 1547306565.558134, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 3, "trainingPhrase": "โครงการขอมาจัดงานอีเว้นบริเวณล้อบบี้ กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
+      { "level": "info", "ts": 1547306565.558134, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 5, "trainingPhrase": "โครงการขอมาจัดงานอีเว้นบริเวณล้อบบี้ กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
       { "level": "info", "ts": 1547306667.3124192, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d5b2d251974fc4534853", "index": 0, "trainingPhrase": "หากนิติต้องทำจ่ายบุคคล หรือ Supplier ต้องเพิ่มข้อมูลทางใด", "matched": false, "intent": "5c24d5f9d251974fc453487a", "retry": 0 } },
       { "level": "info", "ts": 1547306688.600563, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d5bed251974fc453485a", "index": 1, "trainingPhrase": "ถ้ามีลูกบ้านจ่ายเงินล่วงหน้าต้องทำยังไง", "matched": false, "intent": "5c316ec234d1f90001aa26f1", "retry": 0 } },
       { "level": "info", "ts": 1547306693.865719, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d5c1d251974fc453485c", "index": 5, "trainingPhrase": "สร้างระบบใหม่ต้องใช้ระยะเวลาเท่าไหร่", "matched": false, "intent": "5c316bf934d1f90001aa26e3", "retry": 0 } },
@@ -25,7 +25,7 @@ class App extends Component {
       { "level": "info", "ts": 1547306776.708064, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d5f0d251974fc4534876", "index": 7, "trainingPhrase": "วิธี running ใบเสร็จใหม่", "matched": false, "intent": "5c316af134d1f90001aa26df", "retry": 0 } },
       { "level": "info", "ts": 1547306777.023008, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d5f0d251974fc4534876", "index": 8, "trainingPhrase": "รันเลขที่ใบเสร็จเลขใหม่ให้หน่อยค่ะ เนื่องจากใบเสร็จรับเงินล็อตเก่าหมด", "matched": false, "intent": "5c316af134d1f90001aa26df", "retry": 0 } },
     ]
-    const colHeader = ['level', 'ts', 'caller', 'msg', 'count'];
+    const colHeader = ['level', 'ts', 'caller', 'msg', 'question', 'count'];
 
     const header = () => {
       return (
@@ -34,13 +34,19 @@ class App extends Component {
         </tr>
       );
     }
+
+
     const row = () => {
       return input.map((data: any) => {
         return (
           <tr>
             {colHeader.map(key => {
-              // console.log(data[key])
-              return <td>{data[key]}</td>
+              switch (typeof data[key]) {
+                case 'object':
+                  return;
+                default:
+                  return <td>{data[key]}</td>
+              }
             })}
           </tr>
         );
