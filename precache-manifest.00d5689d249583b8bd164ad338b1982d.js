@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/JSONTABLE/static/js/runtime~main.5116505b.js"
   },
   {
-    "revision": "5e8501e822fa0193e05a8da4969999a6",
+    "revision": "dd8a70ac8943e481f5e0d18aa045bcaf",
     "url": "/JSONTABLE/index.html"
   }
 ];
