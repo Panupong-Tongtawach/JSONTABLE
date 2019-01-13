@@ -1,7 +1,7 @@
 import React, { Component, ReactElement } from 'react';
 import './App.css';
 import { DataTypes } from './dataTypes';
-import { Table } from './StyledComponent';
+import { Table, TableHead, TableBody, DetailTable } from './StyledComponent';
 class App extends Component {
 
   input: DataTypes.Data[] = [
@@ -29,8 +29,8 @@ class App extends Component {
 
   renderHeader() {
     return (
-      <tr className='table-header'>
-        {this.colHeader.map((header) => (<td children={header} />))}
+      <tr>
+        {this.colHeader.map((header) => (<th children={header} />))}
       </tr>
     );
   }
@@ -43,7 +43,6 @@ class App extends Component {
             this.colHeader.map((key) => {
               switch (typeof (rowData[key])) {
                 case 'object':
-                  // return;
                   return <tr>{this.renderObjectTable(rowData[key])}</tr>;
                 default:
                   return <td>{rowData[key]}</td>
@@ -57,7 +56,7 @@ class App extends Component {
 
   renderObjectTable(object: any): any {
     return (
-      <table>
+      <DetailTable>
         {
           Object.keys(object).map((key: any) => {
             switch (typeof object[key]) {
@@ -66,14 +65,14 @@ class App extends Component {
               default:
                 return (
                   <tr>
-                    <td>{key}</td>
+                    <th>{key}</th>
                     <td>{object[key]}</td>
                   </tr>
                 );
             }
           })
         }
-      </table>
+      </DetailTable>
     )
   }
 
@@ -81,8 +80,12 @@ class App extends Component {
     return (
       <div className="App">
         <Table>
-          {this.renderHeader()}
-          {this.renderRows()}
+          <TableHead>
+            {this.renderHeader()}
+          </TableHead>
+          <TableBody>
+            {this.renderRows()}
+          </TableBody>
         </Table>
       </div>
     );
