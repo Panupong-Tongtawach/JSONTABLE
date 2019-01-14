@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "0d8627bc5ad0f3cafe42",
+    "revision": "332a65edeb212d2d7d90",
     "url": "/JSONTABLE/static/css/main.ad698be0.chunk.css"
   },
   {
-    "revision": "0d8627bc5ad0f3cafe42",
-    "url": "/JSONTABLE/static/js/main.0d8627bc.chunk.js"
+    "revision": "332a65edeb212d2d7d90",
+    "url": "/JSONTABLE/static/js/main.332a65ed.chunk.js"
   },
   {
     "revision": "a7013ae1448a3013a695",
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/JSONTABLE/static/js/runtime~main.5116505b.js"
   },
   {
-    "revision": "fa35d6df2831063df7130942299fee2f",
+    "revision": "98ed0c4f7b31a40b3f4d8fbbc6c68f7c",
     "url": "/JSONTABLE/index.html"
   }
 ];
