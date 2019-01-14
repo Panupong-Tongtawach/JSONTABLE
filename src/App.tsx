@@ -2,9 +2,26 @@ import React, { Component, ReactElement } from 'react';
 import './App.css';
 import { DataTypes } from './dataTypes';
 import { Table, TableHead, TableBody, DetailTable } from './StyledComponent';
-class App extends Component {
+import { FileUploader } from './FlieUploader';
 
-  input: DataTypes.Data[] = [
+interface Props {
+
+}
+
+interface States {
+  data: DataTypes.Data[];
+}
+
+class App extends Component<Props, States> {
+
+  constructor(props: Props, state: States) {
+    super(props);
+    this.state = {
+      data: this.defaultDatas
+    }
+  }
+
+  defaultDatas: DataTypes.Data[] = [
     { "level": "info", "ts": 1547306559.829222, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:62", "msg": "Fetch questions success", "count": 165 },
     { "level": "info", "ts": 1547306565.250088, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 2, "trainingPhrase": "กองถ่ายขอเข้าถ่ายทำโมษณา กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
     { "level": "info", "ts": 1547306565.558134, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 5, "trainingPhrase": "โครงการขอมาจัดงานอีเว้นบริเวณล้อบบี้ กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
@@ -36,7 +53,7 @@ class App extends Component {
   }
 
   renderRows() {
-    return this.input.map((rowData: any) => {
+    return this.state.data.map((rowData: any) => {
       return (
         <tr>
           {
@@ -76,9 +93,14 @@ class App extends Component {
     )
   }
 
+  onDataReceive(data: DataTypes.Data[]) {
+    this.setState({ data })
+  }
+
   render() {
     return (
       <div className="App">
+        <FileUploader onReceiveData={this.onDataReceive.bind(this)} />
         <Table>
           <TableHead>
             {this.renderHeader()}

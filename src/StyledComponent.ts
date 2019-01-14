@@ -36,6 +36,7 @@ tr:nth-child(even){
 `;
 
 export const DetailTable = styled.table`
+width: 100%;
 th {
     padding: 5px;
     text-transform: uppercase;
