@@ -2,7 +2,7 @@ import React, { Component, ReactElement } from 'react';
 import './App.css';
 import { DataTypes } from './dataTypes';
 import { Table, TableHead, TableBody, DetailTable } from './StyledComponent';
-import { FileUploader } from './FlieUploader';
+import { FileUploader } from './FileUploader';
 import styled from 'styled-components';
 
 interface Props {

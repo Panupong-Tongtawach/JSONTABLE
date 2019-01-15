@@ -17,4 +17,9 @@ export module DataTypes {
         intent: string;
         retry: number;
     }
+
+    interface File {
+        name: string;
+        id: number;
+    }
 }
