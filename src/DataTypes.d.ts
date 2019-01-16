@@ -1,5 +1,11 @@
 export module DataTypes {
 
+    interface File {
+        data: Data[];
+        name: string;
+        id: number;
+    }
+
     interface Data {
         level: string;
         ts: number;
@@ -16,10 +22,5 @@ export module DataTypes {
         matched: boolean;
         intent: string;
         retry: number;
-    }
-
-    interface File {
-        name: string;
-        id: number;
     }
 }
