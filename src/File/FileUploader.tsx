@@ -22,10 +22,10 @@ export class FileUploader extends React.PureComponent<Props> {
         console.log('Input Data :', data);
         const parseData = data.map((d) => {
             try {
-                const parseD = JSON.parse(d) as DataTypes.Data;
+                const parseD = JSON.parse(d);
                 return parseD;
             } catch {
-                return {} as DataTypes.Data;
+                return {};
             }
         }).filter((d) => Object.keys(d).length > 0);
         this.props.onAddFile({ name: this.currentFileName, data: parseData, id: 0 });
