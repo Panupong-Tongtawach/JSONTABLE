@@ -17,6 +17,7 @@ width: 100%;
 `;
 
 const Header = styled.header`
+z-index: 3;
 width: 100%;
 `;
 
@@ -42,39 +43,45 @@ class App extends Component<Props, States> {
     }
 
     componentDidMount() {
+        // Add demo file
         this.onFileReceive(this.defaultFiles);
-
     }
 
-    defaultCols = [{ value: 'level', label: 'level' }, { value: 'ts', label: 'ts' }, { value: 'caller', label: 'caller' }, { value: 'msg', label: 'msg' }, { value: 'question', label: 'question' }, { value: 'count', label: 'count' }];
     defaultFiles: DataTypes.File = {
         name: 'default',
         id: 0,
         data: [
-            { "level": "info", "ts": 1547306559.829222, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:62", "msg": "Fetch questions success", "count": 165 },
+            { "level": "info", "ts": 1547306559.829222, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:62", "msg": "Fetch questions success", "count": 165, "test": null, "test2": [1, 2, 3, 999], "test3": undefined },
             { "level": "info", "ts": 1547306565.250088, "caller": "AnalyseTrainingPharse/analyse_training_pharse.go:74", "msg": "Match", "question": { "qid": "5c24d504d251974fc4534805", "index": 2, "trainingPhrase": "กองถ่ายขอเข้าถ่ายทำโมษณา กรรมการอนุมัติได้หรือไม่", "matched": false, "intent": "5c24d507d251974fc4534806", "retry": 0 } },
         ],
     };
 
-    onFileReceive(file: DataTypes.File) {
-        const currentID = this.state.currentID + 1
-        const files = this.state.files.concat({ ...file, id: currentID })
-        const newFileKeys = file.data.map(f => Object.keys(f)).reduce((x, y) => x.concat(y));
-        const newFileCols: DataTypes.SelectOption[] = newFileKeys.map(k => ({ label: k, value: k }));
-        const colsAvaliable = this.state.colsAvaliable.concat(newFileCols.filter(c => this.state.colsAvaliable.findIndex(o => c.value === o.value) < 0))
-        this.setState({ files, currentID, colsAvaliable });
+    avaliableCols(files: DataTypes.File[]) {
+        const data = files.map(f => f.data).reduce((x, d) => x.concat(d), []);
+        const colSet = new Set<string>(data.map(d => Object.keys(d)).reduce((x, y) => x.concat(y), []));
+        const cols: DataTypes.SelectOption[] = [];
+        colSet.forEach(c => cols.push({ label: c, value: c }));
+        return cols;
     }
 
-    onRemoveFile(id: number) {
-        this.setState({ files: this.state.files.filter(x => id !== x.id) })
+    onFileReceive(file: DataTypes.File) {
+        const currentID = this.state.currentID + 1;
+        const files = this.state.files.concat({ ...file, id: currentID });
+        this.setState({ files, currentID, colsAvaliable: this.avaliableCols([...this.state.files, file]) });
+    }
+
+    onFileRemove(id: number) {
+        const newFiles = this.state.files.filter(x => id !== x.id);
+        const newAvaCols = this.avaliableCols(newFiles);
+        const newSelCols = this.state.colsSelected.filter(x => newAvaCols.findIndex(y => y.value === x.value) > 0);
+        this.setState({ files: newFiles, colsAvaliable: newAvaCols, colsSelected: newSelCols });
     }
 
     onClearAll(e: React.FormEvent<HTMLButtonElement>) {
-        this.setState({ files: [], currentID: -1 });
+        this.setState({ files: [], currentID: -1, colsAvaliable: [], colsSelected: [] });
     }
 
     onSelectColsChange(value: ValueType<DataTypes.SelectOption>) {
-        debugger
         this.setState({ colsSelected: value as DataTypes.SelectOption[] });
     }
 
@@ -82,9 +89,10 @@ class App extends Component<Props, States> {
         return (
             <Container>
                 <Header>
+                    <h1>Please Select file</h1>
                     <FileUploader onAddFile={this.onFileReceive.bind(this)} />
                     <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange.bind(this)} isSearchable={true} isMulti={true} />
-                    <FileList files={this.state.files} onRemoveFile={this.onRemoveFile.bind(this)} />
+                    <FileList files={this.state.files} onFileRemove={this.onFileRemove.bind(this)} />
                     <button onClick={this.onClearAll.bind(this)} children="Clear" />
                 </Header>
                 <TableContainer>

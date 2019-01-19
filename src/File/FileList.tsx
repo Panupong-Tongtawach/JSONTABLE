@@ -3,13 +3,13 @@ import { DataTypes } from "../dataTypes";
 
 interface Props {
     files: DataTypes.File[];
-    onRemoveFile: (x: number) => void;
+    onFileRemove: (x: number) => void;
 }
 
 export class FileList extends React.Component<Props> {
 
     private renderFileRow(file: DataTypes.File) {
-        const onRemoveClick = () => this.props.onRemoveFile(file.id);
+        const onRemoveClick = () => this.props.onFileRemove(file.id);
         return (
             <tr>
                 <td>{file.name}</td>

@@ -8,17 +8,18 @@ interface Props {
 }
 
 const TableHead = styled.thead`
+        
+    z-index: 2;
     th {
+        position: sticky;
+        position: -webkit-sticky;
         background-color: #101010;
         text-transform: uppercase;
         color: #00ad5f;
         font-size: 15px;
         font-weight: 500;
         padding: 20px 10px;
-        position: sticky;
-        position: -webkit-sticky;
         top: 0;
-        z-index: 999;
     }
 `;
 
@@ -66,7 +67,10 @@ export class Table extends React.PureComponent<Props> {
     private renderHeaderRow() {
         return (
             <TableHead>
-                {this.props.displayColumn.map((col) => (<th children={col} />))}
+                {this.props.displayColumn.length === 0 ?
+                    <th children={"Please select display column"} /> :
+                    this.props.displayColumn.map((col) => (<th children={col} />))
+                }
             </TableHead>
         );
     }
@@ -79,12 +83,16 @@ export class Table extends React.PureComponent<Props> {
         return (
             <tr>
                 {this.props.displayColumn.map((key) => {
-                    switch (typeof (data[key])) {
-                        case 'object':
-                            return <tr>{this.renderObjectTable(data[key])}</tr>
-                        default:
-                            return <td>{data[key]}</td>
+                    const col = data[key];
+                    if (typeof (col) === 'object') {
+                        switch (col) {
+                            case null:
+                                return <td>null</td>
+                            default:
+                                return <td>{this.renderObjectTable(data[key])}</td>
+                        }
                     };
+                    return <td>{data[key]}</td>
                 })}
             </tr>
         )
