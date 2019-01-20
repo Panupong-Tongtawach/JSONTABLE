@@ -21,6 +21,7 @@ export class FileList extends React.Component<Props> {
     render() {
         return (
             <table>
+                <th>File list</th>
                 {this.props.files.map(x => this.renderFileRow(x))}
             </table>
         );

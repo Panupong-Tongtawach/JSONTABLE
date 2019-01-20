@@ -89,7 +89,7 @@ class App extends Component<Props, States> {
         return (
             <Container>
                 <Header>
-                    <h1>Please Select file</h1>
+                    <h1>JSON TABLE</h1>
                     <FileUploader onAddFile={this.onFileReceive.bind(this)} />
                     <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange.bind(this)} isSearchable={true} isMulti={true} />
                     <FileList files={this.state.files} onFileRemove={this.onFileRemove.bind(this)} />

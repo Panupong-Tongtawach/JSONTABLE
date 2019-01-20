@@ -7,124 +7,123 @@ interface Props {
     displayColumn: string[];
 }
 
-const TableHead = styled.thead`
-        
-    z-index: 2;
-    th {
-        position: sticky;
-        position: -webkit-sticky;
-        background-color: #101010;
+
+const MainTable = styled.div`
+    width: 100%;
+    display: table;
+    text-align: left;
+    .head {
+        display: table-row;
+        z-index: 2;
         text-transform: uppercase;
+        background-color: #101010;
         color: #00ad5f;
         font-size: 15px;
-        font-weight: 500;
-        padding: 20px 10px;
-        top: 0;
+        font-weight: bold;
+        .col {
+            position: sticky;
+            position: -webkit-sticky;
+            padding: 20px 10px;
+            top: 0;
+        }
     }
-`;
 
-const DetailTable = styled.table`
-width: 100%;
-th {
-    padding: 5px;
-    text-transform: uppercase;
-    font-weight: 500;
-}
-td {
-    vertical-align: top;
-}
-`;
+    .col{
+        display: table-cell;
+    }
 
-const FileNameRow = styled.tr`
-th{
-column-span: all;
-}
-`;
+    .body {
+        display: table-row-group;
+        color: #b1b1b1;
+        font-size: 15px;
+        .col {
+            padding: 10px;
+            vertical-align: top;
+        }
+        .row:nth-child(odd) {
+            background-color: #252525;
+        }
+        .row:nth-child(even) {
+            background-color: #202020;
+        }
+        .filename {
+            background-color: #151515;
+            color: #6ae4a7;
+            padding: 10px;
+            column-span: all;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    }
 
-const TableBody = styled.tbody`
-color: #b1b1b1;
-font-size: 15px;
-td {
-    padding: 10px;
-    vertical-align: top;
-}
-tr:nth-child(odd){
-    background-color: #252525;
-}
-tr:nth-child(even){
-    background-color: #202020;
-}
-`;
-
-const MainTable = styled.table`
-width: 100%;
-border-collapse: collapse;
-text-align: left;
+    .row{
+        display: table-row;
+    }
 `;
 
 export class Table extends React.PureComponent<Props> {
 
     private renderHeaderRow() {
         return (
-            <TableHead>
+            <div className="head">
                 {this.props.displayColumn.length === 0 ?
-                    <th children={"Please select display column"} /> :
-                    this.props.displayColumn.map((col) => (<th children={col} />))
+                    <div className="col" children={"Please select display column"} /> :
+                    this.props.displayColumn.map((col) => (<div className="col" children={col} />))
                 }
-            </TableHead>
+            </div>
         );
     }
 
     private renderFileNameRow(name: string) {
-        return <FileNameRow><th>{name}</th></FileNameRow>;
+        return <div className="filename">{name}</div>;
     }
 
     private renderFileDataRow(data: any) {
         return (
-            <tr>
+            <div className="row">
                 {this.props.displayColumn.map((key) => {
                     const col = data[key];
                     if (typeof (col) === 'object') {
                         switch (col) {
                             case null:
-                                return <td>null</td>
+                                return <div className="col">null</div>
                             default:
-                                return <td>{this.renderObjectTable(data[key])}</td>
+                                return <div className="col">{this.renderObjectTable(data[key])}</div>
                         }
                     };
-                    return <td>{data[key]}</td>
+                    return <div className="col">{data[key]}</div>
                 })}
-            </tr>
+            </div>
         )
     }
 
     renderObjectTable(object: any): any {
         return (
-            <DetailTable>
+            <MainTable>
                 {Object.keys(object).map((key: any) => {
                     switch (typeof object[key]) {
                         case 'object':
-                            return <tr>{this.renderObjectTable(object[key])}</tr>
+                            return <div className="col">{this.renderObjectTable(object[key])}</div>
                         default:
                             return (
-                                <tr>
-                                    <th>{key}</th>
-                                    <td>{object[key]}</td>
-                                </tr>
+                                <div className="row">
+                                    <div className="col">{key}</div>
+                                    <div className="col">{object[key]}</div>
+                                </div>
                             );
                     };
                 })}
-            </DetailTable>
+            </MainTable>
         )
     }
 
     private renderRows() {
         return this.props.data.map(file => {
             return (
-                <TableBody>
+                <div className="body">
                     {this.renderFileNameRow(file.name)}
                     {file.data.map((data) => this.renderFileDataRow(data))}
-                </TableBody>
+                </div>
             );
         });
     }
