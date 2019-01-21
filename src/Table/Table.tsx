@@ -8,56 +8,51 @@ interface Props {
 }
 
 
-const MainTable = styled.div`
+const MainTable = styled.table`
     width: 100%;
-    display: table;
+    border-collapse: collapse;
     text-align: left;
-    .head {
-        display: table-row;
+    thead {
         z-index: 2;
         text-transform: uppercase;
-        background-color: #101010;
         color: #00ad5f;
         font-size: 15px;
         font-weight: bold;
-        .col {
+        
+        th {
+            background-color: #101010;
+            min-width: 50px;
             position: sticky;
-            position: -webkit-sticky;
             padding: 20px 10px;
             top: 0;
         }
     }
 
-    .col{
-        display: table-cell;
-    }
-
-    .body {
-        display: table-row-group;
-        color: #b1b1b1;
+    tbody {
+        color: white;
         font-size: 15px;
-        .col {
+        td {
             padding: 10px;
             vertical-align: top;
         }
-        .row:nth-child(odd) {
+
+        tr:nth-child(odd) {
             background-color: #252525;
         }
-        .row:nth-child(even) {
+        tr:nth-child(even) {
             background-color: #202020;
         }
-        .filename {
-            background-color: #151515;
-            color: #6ae4a7;
-            padding: 10px;
-            column-span: all;
-            font-size: 15px;
-            font-weight: 500;
-        }
     }
-
-    .row{
-        display: table-row;
+    .filename {
+        background-color: black;
+        color: #909090;
+        column-span: all;
+        font-size: 17px;
+        font-weight: 500;
+        td {
+            padding: 7px 15px;
+            font-style: italic;
+        }
     }
 `;
 
@@ -65,35 +60,35 @@ export class Table extends React.PureComponent<Props> {
 
     private renderHeaderRow() {
         return (
-            <div className="head">
+            <thead>
                 {this.props.displayColumn.length === 0 ?
-                    <div className="col" children={"Please select display column"} /> :
-                    this.props.displayColumn.map((col) => (<div className="col" children={col} />))
+                    <th children={"Please select display column"} /> :
+                    this.props.displayColumn.map((col) => (<th children={col} />))
                 }
-            </div>
+            </thead>
         );
     }
 
     private renderFileNameRow(name: string) {
-        return <div className="filename">{name}</div>;
+        return <tr className="filename"><td colSpan={100}>{name}</td></tr>;
     }
 
     private renderFileDataRow(data: any) {
         return (
-            <div className="row">
+            <tr>
                 {this.props.displayColumn.map((key) => {
                     const col = data[key];
                     if (typeof (col) === 'object') {
                         switch (col) {
                             case null:
-                                return <div className="col">null</div>
+                                return <td>null</td>
                             default:
-                                return <div className="col">{this.renderObjectTable(data[key])}</div>
+                                return <td>{this.renderObjectTable(data[key])}</td>
                         }
                     };
-                    return <div className="col">{data[key]}</div>
+                    return <td>{data[key]}</td>
                 })}
-            </div>
+            </tr>
         )
     }
 
@@ -103,13 +98,13 @@ export class Table extends React.PureComponent<Props> {
                 {Object.keys(object).map((key: any) => {
                     switch (typeof object[key]) {
                         case 'object':
-                            return <div className="col">{this.renderObjectTable(object[key])}</div>
+                            return <td>{this.renderObjectTable(object[key])}</td>
                         default:
                             return (
-                                <div className="row">
-                                    <div className="col">{key}</div>
-                                    <div className="col">{object[key]}</div>
-                                </div>
+                                <tr>
+                                    <td>{key}</td>
+                                    <td>{object[key]}</td>
+                                </tr>
                             );
                     };
                 })}
@@ -120,10 +115,12 @@ export class Table extends React.PureComponent<Props> {
     private renderRows() {
         return this.props.data.map(file => {
             return (
-                <div className="body">
+                <>
                     {this.renderFileNameRow(file.name)}
-                    {file.data.map((data) => this.renderFileDataRow(data))}
-                </div>
+                    <tbody>
+                        {file.data.map((data) => this.renderFileDataRow(data))}
+                    </tbody>
+                </>
             );
         });
     }
