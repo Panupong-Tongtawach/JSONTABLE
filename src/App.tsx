@@ -21,10 +21,39 @@ const Container = styled.div`
 
 const Header = styled.header`
     z-index: 3;
-    width: 100%;
+    margin: 15px 30px;
 
-    h2{
-        display: inline-block;
+    .title {
+        font-size: 24px;
+        padding: 10px 0;
+        font-weight: 600;
+    }
+
+    .file {
+        margin-bottom: 15px;
+        display: grid;
+        &-title{
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+    }
+
+    .colselect{
+        display: flex;
+        align-items: center;
+        &-select{
+            flex: 1 100%;
+        }
+        &-title{
+            text-transform: uppercase;
+            font-weight: 500;
+            white-space: nowrap;
+            font-size: 18px;
+            padding-right: 15px;
+            flex: 1 auto;
+        }
     }
 `;
 
@@ -115,12 +144,19 @@ class App extends Component<Props, States> {
         return (
             <Container>
                 <Header>
-                    <h1>JSON TABLE</h1>
-                    <FileUploader onAddFile={this.onFileReceive.bind(this)} />
-                    <h2>File Lists</h2>
-                    <button onClick={this.onClearAll.bind(this)} children="Clear" />
-                    <FileList files={this.state.files} onFileRemove={this.onFileRemove.bind(this)} />
-                    <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange.bind(this)} isSearchable={true} isMulti={true} />
+                    <div className="title">JSON TABLE</div>
+                    <div className="file">
+                        <div className="file-title">File Lists</div>
+                        <FileList files={this.state.files} onFileRemove={this.onFileRemove.bind(this)} />
+                        <FileUploader onAddFile={this.onFileReceive.bind(this)} />
+                        <button onClick={this.onClearAll.bind(this)} children="Clear" />
+                    </div>
+                    <div className="colselect">
+                        <div className="colselect-title">Col Lists</div>
+                        <div className="colselect-select">
+                            <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange.bind(this)} isSearchable={true} isMulti={true} />
+                        </div>
+                    </div>
                 </Header>
                 <TableContainer>
                     <Table data={this.state.files} displayColumn={this.state.colsSelected.map(x => x.value)} />

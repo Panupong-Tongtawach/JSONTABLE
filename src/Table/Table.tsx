@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
+import { isNullOrUndefined } from 'util';
 
 interface Props {
     data: DataTypes.File[];
@@ -61,10 +62,12 @@ export class Table extends React.PureComponent<Props> {
     private renderHeaderRow() {
         return (
             <thead>
-                {this.props.displayColumn.length === 0 ?
-                    <th children={"Please select display column"} /> :
-                    this.props.displayColumn.map((col) => (<th children={col} />))
-                }
+                <tr>
+                    {this.props.displayColumn.length === 0 ?
+                        <th children={"Please select display column"} /> :
+                        this.props.displayColumn.map((col) => (<th children={col} />))
+                    }
+                </tr>
             </thead>
         );
     }
@@ -74,22 +77,29 @@ export class Table extends React.PureComponent<Props> {
     }
 
     private renderFileDataRow(data: any) {
+        let isDataExists = false;
+
+        const cols = this.props.displayColumn.map((key) => {
+            const col = data[key];
+            if (typeof (col) === 'object') {
+                isDataExists = true;
+                switch (col) {
+                    case null:
+                        return "null";
+                    default:
+                        return this.renderObjectTable(data[key]);
+                }
+            };
+            isDataExists = isDataExists || !isNullOrUndefined(data[key]);
+            return data[key];
+        });
+
         return (
-            <tr>
-                {this.props.displayColumn.map((key) => {
-                    const col = data[key];
-                    if (typeof (col) === 'object') {
-                        switch (col) {
-                            case null:
-                                return <td>null</td>
-                            default:
-                                return <td>{this.renderObjectTable(data[key])}</td>
-                        }
-                    };
-                    return <td>{data[key]}</td>
-                })}
-            </tr>
-        )
+            isDataExists ? (
+                <tr>
+                    {cols.map(c => <td>{c}</td>)}
+                </tr>
+            ) : null)
     }
 
     renderObjectTable(object: any): any {
@@ -113,14 +123,16 @@ export class Table extends React.PureComponent<Props> {
     }
 
     private renderRows() {
-        return this.props.data.map(file => {
+        return this.props.data.map((file, i) => {
             return (
-                <>
-                    {this.renderFileNameRow(file.name)}
+                <React.Fragment key={i}>
+                    <tbody>
+                        {this.renderFileNameRow(file.name)}
+                    </tbody>
                     <tbody>
                         {file.data.map((data) => this.renderFileDataRow(data))}
                     </tbody>
-                </>
+                </React.Fragment>
             );
         });
     }

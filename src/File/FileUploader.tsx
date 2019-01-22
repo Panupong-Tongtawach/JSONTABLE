@@ -1,9 +1,22 @@
 import * as React from 'react';
 import { DataTypes } from '../dataTypes';
+import styled from 'styled-components';
 
 interface Props {
     onAddFile: (x: DataTypes.File) => void;
 }
+
+const FileUploaderWrapper = styled.div`
+    background-color: gray;
+
+    input[type="file"] {
+        display: none;
+    }
+    .border{
+
+    }
+`;
+
 
 export class FileUploader extends React.PureComponent<Props> {
 
@@ -45,6 +58,15 @@ export class FileUploader extends React.PureComponent<Props> {
     }
 
     render() {
-        return <input type="file" onChange={this.onReceiveFile.bind(this)} />
+        return (
+            <FileUploaderWrapper>
+                <label htmlFor="fileSelector" >
+                    <div className="border">
+                        Add File
+                    </div>
+                </label>
+                <input id="fileSelector" type="file" onChange={this.onReceiveFile.bind(this)} />
+            </FileUploaderWrapper>
+        )
     }
 }
