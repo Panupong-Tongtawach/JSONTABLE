@@ -7,13 +7,29 @@ interface Props {
 }
 
 const FileUploaderWrapper = styled.div`
-    background-color: gray;
+    width: 100%;
+    height: 100%;
 
     input[type="file"] {
         display: none;
     }
-    .border{
 
+    .border{
+        font-weight: 500;
+        font-size: 20px;
+        border: solid 1px hsl(0,0%,80%);
+        border-radius: 4px;
+        background-color: white;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .border:hover{
+        background-color: hsl(0,0%,80%);
     }
 `;
 
@@ -62,7 +78,7 @@ export class FileUploader extends React.PureComponent<Props> {
             <FileUploaderWrapper>
                 <label htmlFor="fileSelector" >
                     <div className="border">
-                        Add File
+                        Add
                     </div>
                 </label>
                 <input id="fileSelector" type="file" onChange={this.onReceiveFile.bind(this)} />

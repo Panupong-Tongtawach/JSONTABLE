@@ -39,13 +39,15 @@ const MainTable = styled.table`
 
         tr:nth-child(odd) {
             background-color: #252525;
+            &.filename {
+                background-color: black;
+            }
         }
         tr:nth-child(even) {
             background-color: #202020;
         }
     }
     .filename {
-        background-color: black;
         color: #909090;
         column-span: all;
         font-size: 17px;
