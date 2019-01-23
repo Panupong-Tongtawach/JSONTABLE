@@ -8,6 +8,9 @@ interface Props {
 interface States {
     isExpand: boolean;
 }
+
+// TODO: In progress...
+
 export class ExpandableRow extends PureComponent<Props, States> {
 
     constructor(props: Props, states: States) {

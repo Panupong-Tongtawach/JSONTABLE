@@ -1,9 +1,38 @@
 import * as React from 'react';
 import { DataTypes } from '../dataTypes';
+import styled from 'styled-components';
 
 interface Props {
     onAddFile: (x: DataTypes.File) => void;
 }
+
+const FileUploaderWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .border{
+        font-weight: 500;
+        font-size: 20px;
+        border: solid 1px hsl(0,0%,80%);
+        border-radius: 4px;
+        background-color: white;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .border:hover{
+        background-color: hsl(0,0%,80%);
+    }
+`;
+
 
 export class FileUploader extends React.PureComponent<Props> {
 
@@ -22,10 +51,10 @@ export class FileUploader extends React.PureComponent<Props> {
         console.log('Input Data :', data);
         const parseData = data.map((d) => {
             try {
-                const parseD = JSON.parse(d) as DataTypes.Data;
+                const parseD = JSON.parse(d);
                 return parseD;
             } catch {
-                return {} as DataTypes.Data;
+                return {};
             }
         }).filter((d) => Object.keys(d).length > 0);
         this.props.onAddFile({ name: this.currentFileName, data: parseData, id: 0 });
@@ -33,19 +62,27 @@ export class FileUploader extends React.PureComponent<Props> {
 
     private onReceiveFile(e: React.FormEvent<HTMLInputElement>) {
         let file = e.currentTarget.files && e.currentTarget.files[0];
-        console.log(file);
-        const fileExtensionRegex = /^.*\.(json|jsonl)$/i;
         if (file) {
+            const fileExtensionRegex = /^.*\.(json|jsonl)$/i;
             if (file && fileExtensionRegex.test(file.name)) {
                 this.reader.readAsText(file as Blob);
                 this.currentFileName = file.name;
             } else {
-                alert('File not support!!');
+                alert('File type not support, Please use JSON.');
             }
         }
     }
 
     render() {
-        return <input type="file" onChange={this.onReceiveFile.bind(this)} />
+        return (
+            <FileUploaderWrapper>
+                <label htmlFor="fileSelector" >
+                    <div className="border">
+                        Add
+                    </div>
+                </label>
+                <input id="fileSelector" type="file" onChange={this.onReceiveFile.bind(this)} />
+            </FileUploaderWrapper>
+        )
     }
 }

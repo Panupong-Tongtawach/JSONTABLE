@@ -1,18 +1,11 @@
+import { Option } from "react-select/lib/filters";
+
 export module DataTypes {
 
     interface File {
-        data: Data[];
+        data: object[];
         name: string;
         id: number;
-    }
-
-    interface Data {
-        level: string;
-        ts: number;
-        caller: string;
-        msg: string;
-        question?: Question
-        count?: number;
     }
 
     interface Question {
@@ -22,5 +15,10 @@ export module DataTypes {
         matched: boolean;
         intent: string;
         retry: number;
+    }
+
+    interface SelectOption {
+        value: string;
+        label: string;
     }
 }
