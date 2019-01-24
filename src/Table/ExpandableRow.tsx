@@ -1,33 +1,40 @@
-import { ReactElement, PureComponent } from 'react'
+import * as React from 'react';
+import styled from 'styled-components';
+
+const ExpandableRowWrapper = styled.div`
+    color: white;
+`;
 
 interface Props {
-    cols: string[];
-    expandElement: ReactElement<HTMLDivElement>;
+    cols: any[];
 }
 
 interface States {
-    isExpand: boolean;
 }
 
 // TODO: In progress...
 
-export class ExpandableRow extends PureComponent<Props, States> {
+export class ExpandableRow extends React.PureComponent<Props, States> {
 
     constructor(props: Props, states: States) {
         super(props);
-        this.state = { isExpand: false }
     }
 
-    onRowClick() {
-        this.setState({ isExpand: !this.state.isExpand })
+    renderRow(c: any) {
+        return (
+            <tr>
+                <td>{c}</td>
+            </tr>
+        )
     }
 
     render() {
         return (
-            <>
-                <tr onClick={this.onRowClick}>{this.props.cols.map(col => <td>{col}</td>)}</tr>
-                <td>{this.props.expandElement}</td>
-            </>
+            <ExpandableRowWrapper>
+                <table>
+                    {this.props.cols.map(r => this.renderRow(r))}
+                </table>
+            </ExpandableRowWrapper>
         );
     }
 }

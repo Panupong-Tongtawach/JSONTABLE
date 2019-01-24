@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
 import { isNullOrUndefined } from 'util';
+import { ExpandableRow } from './ExpandableRow';
 
 interface Props {
     data: DataTypes.File[];
@@ -36,7 +37,6 @@ const MainTable = styled.table`
             padding: 10px;
             vertical-align: top;
         }
-
         tr:nth-child(odd) {
             background-color: #252525;
             &.filename {
@@ -67,7 +67,7 @@ export class Table extends React.PureComponent<Props> {
                 <tr>
                     {this.props.displayColumn.length === 0 ?
                         <th children={"Please select display column"} /> :
-                        this.props.displayColumn.map((col) => (<th children={col} />))
+                        this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
                     }
                 </tr>
             </thead>
@@ -98,9 +98,14 @@ export class Table extends React.PureComponent<Props> {
 
         return (
             isDataExists ? (
-                <tr>
-                    {cols.map(c => <td>{c}</td>)}
-                </tr>
+                <>
+                    <tr>
+                        {cols.map(c => <td>{c}</td>)}
+                    </tr>
+                    <tr>
+                        <ExpandableRow cols={cols} />
+                    </tr>
+                </>
             ) : null)
     }
 

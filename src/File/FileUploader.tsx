@@ -26,6 +26,7 @@ const FileUploaderWrapper = styled.div`
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
+        cursor: pointer;
     }
 
     .border:hover{
