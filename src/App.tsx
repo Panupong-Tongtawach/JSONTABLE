@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Table } from './Table/Table';
 import { FileList } from './File/FileList';
 import { ValueType } from 'react-select/lib/types';
+import { DetailTable } from './Table/DetailTable';
 
 const TableContainer = styled.div`
     width: 100%;
@@ -160,7 +161,6 @@ class App extends Component<Props, States> {
         return (
             <Container>
                 <Header>
-
                     <div className="file">
                         <div className="file-title">File Lists</div>
                         <div className="file-grid">

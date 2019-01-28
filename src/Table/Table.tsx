@@ -2,7 +2,8 @@ import * as React from 'react';
 import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
 import { isNullOrUndefined } from 'util';
-import { ExpandableRow } from './ExpandableRow';
+import { DetailTable } from './DetailTable';
+import { all } from 'q';
 
 interface Props {
     data: DataTypes.File[];
@@ -29,7 +30,6 @@ const MainTable = styled.table`
             top: 0;
         }
     }
-
     tbody {
         color: white;
         font-size: 15px;
@@ -61,7 +61,7 @@ const MainTable = styled.table`
 
 export class Table extends React.PureComponent<Props> {
 
-    private renderHeaderRow() {
+    private renderHeader() {
         return (
             <thead>
                 <tr>
@@ -75,25 +75,27 @@ export class Table extends React.PureComponent<Props> {
     }
 
     private renderFileNameRow(name: string) {
-        return <tr className="filename"><td colSpan={100}>{name}</td></tr>;
+        return <tr className="filename"><td colSpan={1000}>{name}</td></tr>;
     }
 
     private renderFileDataRow(data: any) {
         let isDataExists = false;
-
+        const detailData: [string, any][] = [];
         const cols = this.props.displayColumn.map((key) => {
-            const col = data[key];
-            if (typeof (col) === 'object') {
+            const colData = data[key];
+            detailData.push([key, colData]);
+
+            if (typeof (colData) === 'object') {
                 isDataExists = true;
-                switch (col) {
+                switch (colData) {
                     case null:
                         return "null";
                     default:
-                        return this.renderObjectTable(data[key]);
+                        return JSON.stringify(colData);
                 }
             };
-            isDataExists = isDataExists || !isNullOrUndefined(data[key]);
-            return data[key];
+            isDataExists = isDataExists || !isNullOrUndefined(colData);
+            return colData;
         });
 
         return (
@@ -103,30 +105,10 @@ export class Table extends React.PureComponent<Props> {
                         {cols.map(c => <td>{c}</td>)}
                     </tr>
                     <tr>
-                        <ExpandableRow cols={cols} />
+                        <td colSpan={1000}><DetailTable data={detailData} /></td>
                     </tr>
                 </>
-            ) : null)
-    }
-
-    renderObjectTable(object: any): any {
-        return (
-            <MainTable>
-                {Object.keys(object).map((key: any) => {
-                    switch (typeof object[key]) {
-                        case 'object':
-                            return <td>{this.renderObjectTable(object[key])}</td>
-                        default:
-                            return (
-                                <tr>
-                                    <td>{key}</td>
-                                    <td>{object[key]}</td>
-                                </tr>
-                            );
-                    };
-                })}
-            </MainTable>
-        )
+            ) : null);
     }
 
     private renderRows() {
@@ -137,7 +119,7 @@ export class Table extends React.PureComponent<Props> {
                         {this.renderFileNameRow(file.name)}
                     </tbody>
                     <tbody>
-                        {file.data.map((data) => this.renderFileDataRow(data))}
+                        {file.data.map(d => this.renderFileDataRow(d))}
                     </tbody>
                 </React.Fragment>
             );
@@ -147,7 +129,7 @@ export class Table extends React.PureComponent<Props> {
     render() {
         return (
             <MainTable>
-                {this.renderHeaderRow()}
+                {this.renderHeader()}
                 {this.renderRows()}
             </MainTable>
         );
