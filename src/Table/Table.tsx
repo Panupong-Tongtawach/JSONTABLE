@@ -3,7 +3,7 @@ import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
 import { isNullOrUndefined } from 'util';
 import { DetailTable } from './DetailTable';
-import { all } from 'q';
+import { ExpandableRow } from './ExpandableRow';
 
 interface Props {
     data: DataTypes.File[];
@@ -65,9 +65,10 @@ export class Table extends React.PureComponent<Props> {
         return (
             <thead>
                 <tr>
-                    {this.props.displayColumn.length === 0 ?
-                        <th children={"Please select display column"} /> :
-                        this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
+                    {
+                        this.props.displayColumn.length === 0 ?
+                            <th children={"Please select display column"} /> :
+                            this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
                     }
                 </tr>
             </thead>
@@ -104,9 +105,12 @@ export class Table extends React.PureComponent<Props> {
                     <tr>
                         {cols.map(c => <td>{c}</td>)}
                     </tr>
-                    <tr>
-                        <td colSpan={1000}><DetailTable data={detailData} /></td>
-                    </tr>
+                    <ExpandableRow>
+
+                        <tr>
+                            <td colSpan={1000}><DetailTable data={detailData} /></td>
+                        </tr>
+                    </ExpandableRow>
                 </>
             ) : null);
     }
