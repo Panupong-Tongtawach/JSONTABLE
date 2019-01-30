@@ -101,17 +101,11 @@ export class Table extends React.PureComponent<Props> {
 
         return (
             isDataExists ? (
-                <>
-                    <tr>
-                        {cols.map(c => <td>{c}</td>)}
-                    </tr>
-                    <ExpandableRow>
 
-                        <tr>
-                            <td colSpan={1000}><DetailTable data={detailData} /></td>
-                        </tr>
-                    </ExpandableRow>
-                </>
+                <ExpandableRow displayItem={<tr>{cols.map(c => <td>{c}</td>)}</tr>}>
+                    <td colSpan={1000}><DetailTable data={detailData} /></td>
+                </ExpandableRow>
+
             ) : null);
     }
 
