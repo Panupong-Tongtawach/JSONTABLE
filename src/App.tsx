@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { Table } from './Table/Table';
 import { FileList } from './File/FileList';
 import { ValueType } from 'react-select/lib/types';
-import { DetailTable } from './Table/DetailTable';
 
 const TableContainer = styled.div`
     width: 100%;
@@ -129,7 +128,7 @@ class App extends Component<Props, States> {
     };
 
     avaliableCols(files: DataTypes.File[]) {
-        const data = files.map(f => f.data).reduce((x, d) => x.concat(d), []);
+        const data = ([] as object[]).concat.apply([], files.map(f => f.data));
         const colSet = new Set<string>(data.map(d => Object.keys(d)).reduce((x, y) => x.concat(y), []));
         const cols: DataTypes.SelectOption[] = [];
         colSet.forEach(c => cols.push({ label: c, value: c }));
