@@ -34,12 +34,10 @@ interface rowProps extends InjectedExpandableProps {
 }
 
 const ExpandableRowClass = (props: rowProps) => (
-    <tr>
-        <tbody>
-            <tr onClick={props.onClick}>{props.cols.map(c => <td>{c}</td>)}</tr>
-            {props.isExpand ? <tr><td colSpan={1000}><DetailTable data={props.detailData} /></td></tr> : null}
-        </tbody>
-    </tr>
+    <>
+        <tr className="body_data-row" onClick={props.onClick}>{props.cols.map(c => <td>{c}</td>)}</tr>
+        {props.isExpand ? <tr className="body_data-detailrow"><td colSpan={1000}><DetailTable data={props.detailData} /></td></tr> : null}
+    </>
 );
 
 

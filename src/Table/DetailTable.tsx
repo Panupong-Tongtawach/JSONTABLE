@@ -3,8 +3,11 @@ import styled from 'styled-components';
 
 const DetailTableWrapper = styled.div`
     width: 100%;
-    table{
+    table {
         width: 100%;
+        .key {
+            font-style: italic;
+        }
     }
 `;
 
@@ -31,8 +34,8 @@ export class DetailTable extends React.PureComponent<Props> {
                 case 'string':
                     return this.renderRows(d[0], d[1]);
                 default:
-                    if (d[1] === undefined) return this.renderRows(d[0], 'UNDEFINED');
-                    return this.renderRows(d[0], "default");
+                    if (d[1] === undefined) return;
+                    return this.renderRows(d[0], d[1]);
             }
         });
     }
@@ -40,7 +43,7 @@ export class DetailTable extends React.PureComponent<Props> {
     renderRows(key: string, value: any) {
         return (
             <tr>
-                <td>{key}</td>
+                <td className="key">{key}</td>
                 <td>{value}</td>
             </tr>
         );

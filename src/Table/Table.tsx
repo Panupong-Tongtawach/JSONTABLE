@@ -2,7 +2,6 @@ import * as React from 'react';
 import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
 import { isNullOrUndefined } from 'util';
-import { DetailTable } from './DetailTable';
 import { ExpandableRow } from './ExpandableRow';
 
 interface Props {
@@ -15,6 +14,9 @@ const MainTable = styled.table`
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    color: white;
+    font-size: 15px;
+
     thead {
         z-index: 2;
         text-transform: uppercase;
@@ -30,31 +32,33 @@ const MainTable = styled.table`
             top: 0;
         }
     }
-    tbody {
-        color: white;
-        font-size: 15px;
-        td {
-            padding: 10px;
-            vertical-align: top;
-        }
-        tr:nth-child(odd) {
-            background-color: #252525;
-            &.filename {
-                background-color: black;
+
+    .body {
+        &_file-name {
+            background-color: black;
+            color: #909090;
+            font-size: 17px;
+            font-weight: 500;
+            td {
+                padding: 7px 15px;
+                font-style: italic;
             }
         }
-        tr:nth-child(even) {
-            background-color: #202020;
-        }
-    }
-    .filename {
-        color: #909090;
-        column-span: all;
-        font-size: 17px;
-        font-weight: 500;
-        td {
-            padding: 7px 15px;
-            font-style: italic;
+
+        &_data {
+            &-row:nth-child(odd) {
+                background-color: #252525;
+            }
+            &-row:nth-child(even) {
+                background-color: #202020;
+            }
+            &-detailrow {
+                background-color: #303030;
+            }
+            td {
+                padding: 10px;
+                vertical-align: top;
+            }
         }
     }
 `;
@@ -63,20 +67,16 @@ export class Table extends React.PureComponent<Props> {
 
     private renderHeader() {
         return (
-            <thead>
-                <tr>
-                    {
-                        this.props.displayColumn.length === 0 ?
-                            <th children={"Please select display column"} /> :
-                            this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
-                    }
-                </tr>
-            </thead>
+            <thead><tr>{
+                this.props.displayColumn.length === 0 ?
+                    <th children={"Please select display column"} /> :
+                    this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
+            }</tr></thead>
         );
     }
 
     private renderFileNameRow(name: string) {
-        return <tr className="filename"><td colSpan={1000}>{name}</td></tr>;
+        return <tr><td colSpan={1000}>{name}</td></tr>;
     }
 
     private renderFileDataRow(data: any) {
@@ -109,10 +109,10 @@ export class Table extends React.PureComponent<Props> {
         return this.props.data.map((file, i) => {
             return (
                 <React.Fragment key={i}>
-                    <tbody>
+                    <tbody className="body_file-name">
                         {this.renderFileNameRow(file.name)}
                     </tbody>
-                    <tbody>
+                    <tbody className="body_data">
                         {file.data.map(d => this.renderFileDataRow(d))}
                     </tbody>
                 </React.Fragment>
