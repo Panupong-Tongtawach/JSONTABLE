@@ -15,11 +15,10 @@ const FileUploaderWrapper = styled.div`
     }
 
     .border{
-        font-weight: 500;
+        font-weight: 700;
         font-size: 20px;
-        border: solid 1px hsl(0,0%,80%);
         border-radius: 4px;
-        background-color: white;
+        background-color: #333;
         width: 100%;
         height: 100%;
         display: flex;
@@ -30,7 +29,7 @@ const FileUploaderWrapper = styled.div`
     }
 
     .border:hover{
-        background-color: hsl(0,0%,80%);
+        background-color: #4d4d4d;
     }
 `;
 
@@ -43,10 +42,10 @@ export class FileUploader extends React.PureComponent<Props> {
     constructor(props: Props) {
         super(props)
         this.reader = new FileReader();
-        this.reader.onloadend = this.handleFileRead.bind(this);
+        this.reader.onloadend = this.handleFileRead;
     }
 
-    private handleFileRead(ev: ProgressEvent) {
+    private handleFileRead = (ev: ProgressEvent) => {
         const content = this.reader.result as string;
         const data = content.trim().split('\n').filter((d) => d.trim().length > 0);
         console.log('Input Data :', data);
@@ -61,7 +60,7 @@ export class FileUploader extends React.PureComponent<Props> {
         this.props.onAddFile({ name: this.currentFileName, data: parseData, id: 0 });
     }
 
-    private onReceiveFile(e: React.FormEvent<HTMLInputElement>) {
+    private onReceiveFile = (e: React.FormEvent<HTMLInputElement>) => {
         let file = e.currentTarget.files && e.currentTarget.files[0];
         if (file) {
             const fileExtensionRegex = /^.*\.(json|jsonl)$/i;
@@ -74,7 +73,7 @@ export class FileUploader extends React.PureComponent<Props> {
         }
     }
 
-    render() {
+    public render() {
         return (
             <FileUploaderWrapper>
                 <label htmlFor="fileSelector" >
@@ -82,7 +81,7 @@ export class FileUploader extends React.PureComponent<Props> {
                         Add
                     </div>
                 </label>
-                <input id="fileSelector" type="file" onChange={this.onReceiveFile.bind(this)} />
+                <input id="fileSelector" type="file" onChange={this.onReceiveFile} />
             </FileUploaderWrapper>
         )
     }

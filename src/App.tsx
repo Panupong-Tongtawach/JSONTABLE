@@ -52,7 +52,7 @@ const Header = styled.header`
         }
         &-title {
             font-size: 18px;
-            text-transform: uppercase;
+            text-transform: capitalize;
             font-weight: 500;
             white-space: nowrap;
         }
@@ -63,9 +63,10 @@ const Header = styled.header`
         align-items: center;
         &-select{
             flex: 1 100%;
+            color: black;
         }
         &-title{
-            text-transform: uppercase;
+            text-transform: capitalize;
             font-weight: 500;
             white-space: nowrap;
             font-size: 18px;
@@ -96,7 +97,7 @@ class App extends Component<Props, States> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         // Add demo file
         this.onFileReceive(this.defaultFiles);
     }
@@ -127,7 +128,7 @@ class App extends Component<Props, States> {
         ],
     };
 
-    avaliableCols(files: DataTypes.File[]) {
+    private avaliableCols = (files: DataTypes.File[]) => {
         const data = ([] as object[]).concat.apply([], files.map(f => f.data));
         const colSet = new Set<string>(data.map(d => Object.keys(d)).reduce((x, y) => x.concat(y), []));
         const cols: DataTypes.SelectOption[] = [];
@@ -135,28 +136,28 @@ class App extends Component<Props, States> {
         return cols;
     }
 
-    onFileReceive(file: DataTypes.File) {
+    private onFileReceive = (file: DataTypes.File) => {
         const currentID = this.state.currentID + 1;
         const files = this.state.files.concat({ ...file, id: currentID });
         this.setState({ files, currentID, colsAvaliable: this.avaliableCols([...this.state.files, file]) });
     }
 
-    onFileRemove(id: number) {
+    private onFileRemove = (id: number) => {
         const newFiles = this.state.files.filter(x => id !== x.id);
         const newAvaCols = this.avaliableCols(newFiles);
         const newSelCols = this.state.colsSelected.filter(x => newAvaCols.findIndex(y => y.value === x.value) > 0);
         this.setState({ files: newFiles, colsAvaliable: newAvaCols, colsSelected: newSelCols });
     }
 
-    onClearAll(e: React.FormEvent<HTMLButtonElement>) {
+    private onClearAll = (e: React.FormEvent<HTMLButtonElement>) => {
         this.setState({ files: [], currentID: -1, colsAvaliable: [], colsSelected: [] });
     }
 
-    onSelectColsChange(value: ValueType<DataTypes.SelectOption>) {
+    private onSelectColsChange = (value: ValueType<DataTypes.SelectOption>) => {
         this.setState({ colsSelected: value as DataTypes.SelectOption[] });
     }
 
-    render() {
+    public render() {
         return (
             <Container>
                 <Header>
@@ -164,18 +165,18 @@ class App extends Component<Props, States> {
                         <div className="file-title">File Lists</div>
                         <div className="file-grid">
                             <div className="file-upload">
-                                <FileUploader onAddFile={this.onFileReceive.bind(this)} />
+                                <FileUploader onAddFile={this.onFileReceive} />
                             </div>
                             <div className="file-list">
-                                <FileList files={this.state.files} onFileRemove={this.onFileRemove.bind(this)} />
+                                <FileList files={this.state.files} onFileRemove={this.onFileRemove} />
                             </div>
-                            <button className="file-clear" onClick={this.onClearAll.bind(this)} children="Clear" />
+                            <button className="file-clear" onClick={this.onClearAll} children="Clear" />
                         </div>
                     </div>
                     <div className="colselect">
                         <div className="colselect-title">Col Lists</div>
                         <div className="colselect-select">
-                            <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange.bind(this)} isSearchable={true} isMulti={true} />
+                            <Select options={this.state.colsAvaliable} value={this.state.colsSelected} onChange={this.onSelectColsChange} isSearchable={true} isMulti={true} />
                         </div>
                     </div>
                 </Header>

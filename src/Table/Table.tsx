@@ -20,12 +20,12 @@ const MainTable = styled.table`
     thead {
         z-index: 2;
         text-transform: uppercase;
-        color: #00ad5f;
+        color: #fa0000;
         font-size: 15px;
         font-weight: bold;
         
         th {
-            background-color: #101010;
+            background-color: #151515;
             min-width: 50px;
             position: sticky;
             padding: 20px 10px;
