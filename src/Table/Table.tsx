@@ -79,7 +79,7 @@ export class Table extends React.PureComponent<Props> {
         return <tr><td colSpan={1000}>{name}</td></tr>;
     }
 
-    private renderFileDataRow(data: any) {
+    private renderFileDataRow(data: any, key: number) {
         let isDataExists = false;
         const detailData: [string, any][] = [];
         const cols = this.props.displayColumn.map((key) => {
@@ -101,7 +101,7 @@ export class Table extends React.PureComponent<Props> {
 
         return (
             isDataExists ? (
-                <ExpandableRow cols={cols} detailData={detailData} />
+                <ExpandableRow cols={cols} detailData={detailData} key={key} />
             ) : null);
     }
 
@@ -113,7 +113,7 @@ export class Table extends React.PureComponent<Props> {
                         {this.renderFileNameRow(file.name)}
                     </tbody>
                     <tbody className="body_data">
-                        {file.data.map(d => this.renderFileDataRow(d))}
+                        {file.data.map((d, k) => this.renderFileDataRow(d, k))}
                     </tbody>
                 </React.Fragment>
             );

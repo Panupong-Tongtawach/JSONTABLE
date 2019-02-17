@@ -48,7 +48,7 @@ export class FileList extends React.Component<Props> {
             <tr className="row" key={file.id}>
                 <td>
                     <div>{file.name}</div>
-                    <button onClick={onRemoveClick} children="✕" />
+                    <button onClick={onRemoveClick}>✕</button>
                 </td>
             </tr>
         );

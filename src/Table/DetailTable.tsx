@@ -42,7 +42,7 @@ export class DetailTable extends React.PureComponent<Props> {
 
     renderRows(key: string, value: any) {
         return (
-            <tr>
+            <tr key={key}>
                 <td className="key">{key}</td>
                 <td>{value}</td>
             </tr>

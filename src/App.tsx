@@ -78,14 +78,14 @@ const Header = styled.header`
 
 interface Props { }
 
-interface States {
+interface State {
     currentID: number;
     files: DataTypes.File[];
     colsAvaliable: DataTypes.SelectOption[];
     colsSelected: DataTypes.SelectOption[];
 }
 
-class App extends Component<Props, States> {
+class App extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -129,7 +129,7 @@ class App extends Component<Props, States> {
     };
 
     private avaliableCols = (files: DataTypes.File[]) => {
-        const data = ([] as object[]).concat.apply([], files.map(f => f.data));
+        const data = ([] as object[]).concat(...files.map(f => f.data));
         const colSet = new Set<string>(data.map(d => Object.keys(d)).reduce((x, y) => x.concat(y), []));
         const cols: DataTypes.SelectOption[] = [];
         colSet.forEach(c => cols.push({ label: c, value: c }));

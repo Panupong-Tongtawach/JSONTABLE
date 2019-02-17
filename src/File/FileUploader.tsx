@@ -48,28 +48,24 @@ export class FileUploader extends React.PureComponent<Props> {
     private handleFileRead = (ev: ProgressEvent) => {
         const content = this.reader.result as string;
         const data = content.trim().split('\n').filter((d) => d.trim().length > 0);
-        console.log('Input Data :', data);
-        const parseData = data.map((d) => {
+        const parseData: object[] = [];
+        for (let d of data) {
             try {
                 const parseD = JSON.parse(d);
-                return parseD;
+                if (Object.keys(parseD).length > 0) parseData.push(parseD);
             } catch {
-                return {};
+                alert('File type not support, Please use JSON.');
+                return;
             }
-        }).filter((d) => Object.keys(d).length > 0);
+        }
         this.props.onAddFile({ name: this.currentFileName, data: parseData, id: 0 });
     }
 
     private onReceiveFile = (e: React.FormEvent<HTMLInputElement>) => {
         let file = e.currentTarget.files && e.currentTarget.files[0];
         if (file) {
-            const fileExtensionRegex = /^.*\.(json|jsonl)$/i;
-            if (file && fileExtensionRegex.test(file.name)) {
-                this.reader.readAsText(file as Blob);
-                this.currentFileName = file.name;
-            } else {
-                alert('File type not support, Please use JSON.');
-            }
+            this.reader.readAsText(file as Blob);
+            this.currentFileName = file.name;
         }
     }
 
