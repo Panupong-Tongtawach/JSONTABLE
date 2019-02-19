@@ -3,7 +3,7 @@ import { DetailTable } from './DetailTable';
 import { InjectedExpandableProps, makeExpandable } from './MakeExpandable';
 
 interface rowProps extends InjectedExpandableProps {
-    cols: any[];
+    cols: object[];
     detailData: Array<[string, any]>;
 }
 

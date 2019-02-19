@@ -80,10 +80,10 @@ export class Table extends React.PureComponent<Props> {
 
     private renderFileDataRow(data: any, key: number) {
         let isDataExists = false;
-        const detailData: [string, any][] = [];
-        const cols = this.props.displayColumn.map((key) => {
+        const detailData: [string, any][] = this.props.displayColumn.map(k => [k, data[k]] as [string, any]);
+
+        const cols = this.props.displayColumn.map(key => {
             const colData = data[key];
-            detailData.push([key, colData]);
 
             if (typeof (colData) === 'object') {
                 isDataExists = true;
