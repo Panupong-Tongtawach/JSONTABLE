@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { DataTypes } from "../dataTypes";
 import styled from "styled-components";
+import { DataTypes } from "../dataTypes";
 import { isNullOrUndefined } from 'util';
 import { ExpandableRow } from './ExpandableRow';
 
 interface Props {
-    data: DataTypes.File[];
+    file?: DataTypes.File;
     displayColumn: string[];
 }
-
 
 const MainTable = styled.table`
     width: 100%;
@@ -25,7 +24,7 @@ const MainTable = styled.table`
         font-weight: bold;
         
         th {
-            background-color: #151515;
+            background-color: black;
             min-width: 50px;
             position: sticky;
             padding: 20px 10px;
@@ -35,13 +34,13 @@ const MainTable = styled.table`
 
     .body {
         &_file-name {
-            background-color: black;
+            background-color: #131313;
             color: #909090;
             font-size: 17px;
             font-weight: 500;
+            font-style: italic;
             td {
                 padding: 7px 15px;
-                font-style: italic;
             }
         }
 
@@ -106,18 +105,16 @@ export class Table extends React.PureComponent<Props> {
     }
 
     private renderRows() {
-        return this.props.data.map((file, i) => {
-            return (
-                <React.Fragment key={i}>
-                    <tbody className="body_file-name">
-                        {this.renderFileNameRow(file.name)}
-                    </tbody>
-                    <tbody className="body_data">
-                        {file.data.map((d, k) => this.renderFileDataRow(d, k))}
-                    </tbody>
-                </React.Fragment>
-            );
-        });
+        return this.props.file ? (
+            <>
+                <tbody className="body_file-name">
+                    {this.renderFileNameRow(this.props.file.name)}
+                </tbody>
+                <tbody className="body_data">
+                    {this.props.file.data.map((d, i) => this.renderFileDataRow(d, i))}
+                </tbody>
+            </>
+        ) : null;
     }
 
     render() {

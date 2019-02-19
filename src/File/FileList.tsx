@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { Table } from '../Table/Table';
 
 interface Props {
-    files: DataTypes.File[];
+    files: File[];
     onFileRemove: (x: number) => void;
+    onFileSelect: (x: number) => void
 }
 
 const FlieListContainer = styled.div`
@@ -42,13 +43,14 @@ const FlieListContainer = styled.div`
 
 export class FileList extends React.Component<Props> {
 
-    private renderFileRow(file: DataTypes.File) {
-        const onRemoveClick = () => this.props.onFileRemove(file.id);
+    private renderFileRow(file: File, index: number) {
+        const onRemove = () => this.props.onFileRemove(index);
+        const onFileSelect = () => this.props.onFileSelect(index);
         return (
-            <tr className="row" key={file.id}>
+            <tr className="row" key={index}>
                 <td>
-                    <div>{file.name}</div>
-                    <button onClick={onRemoveClick}>✕</button>
+                    <div onClick={onFileSelect}>{file.name}</div>
+                    <button onClick={onRemove}>✕</button>
                 </td>
             </tr>
         );
@@ -58,7 +60,9 @@ export class FileList extends React.Component<Props> {
         return (
             <FlieListContainer>
                 {this.props.files.length > 0 ?
-                    <table className="table"><tbody>{this.props.files.map(x => this.renderFileRow(x))}</tbody></table> :
+                    <table className="table">
+                        <tbody>{this.props.files.map((x, i) => this.renderFileRow(x, i))}</tbody>
+                    </table> :
                     <div className="nodata">No File</div>
                 }
             </FlieListContainer>

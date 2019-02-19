@@ -5,7 +5,6 @@ export module DataTypes {
     interface File {
         data: object[];
         name: string;
-        id: number;
     }
 
     interface Question {

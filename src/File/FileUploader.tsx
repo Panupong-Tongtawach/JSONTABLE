@@ -3,7 +3,7 @@ import { DataTypes } from '../dataTypes';
 import styled from 'styled-components';
 
 interface Props {
-    onAddFile: (x: DataTypes.File) => void;
+    onFileAdd: (x: File) => void;
 }
 
 const FileUploaderWrapper = styled.div`
@@ -36,36 +36,14 @@ const FileUploaderWrapper = styled.div`
 
 export class FileUploader extends React.PureComponent<Props> {
 
-    private currentFileName = '';
-    private reader: FileReader;
-
     constructor(props: Props) {
         super(props)
-        this.reader = new FileReader();
-        this.reader.onloadend = this.handleFileRead;
-    }
-
-    private handleFileRead = (ev: ProgressEvent) => {
-        const content = this.reader.result as string;
-        const data = content.trim().split('\n').filter((d) => d.trim().length > 0);
-        const parseData: object[] = [];
-        for (let d of data) {
-            try {
-                const parseD = JSON.parse(d);
-                if (Object.keys(parseD).length > 0) parseData.push(parseD);
-            } catch {
-                alert('File type not support, Please use JSON.');
-                return;
-            }
-        }
-        this.props.onAddFile({ name: this.currentFileName, data: parseData, id: 0 });
     }
 
     private onReceiveFile = (e: React.FormEvent<HTMLInputElement>) => {
-        let file = e.currentTarget.files && e.currentTarget.files[0];
+        const file = e.currentTarget.files && e.currentTarget.files[0];
         if (file) {
-            this.reader.readAsText(file as Blob);
-            this.currentFileName = file.name;
+            this.props.onFileAdd(file)
         }
     }
 
