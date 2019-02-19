@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { DataTypes } from "../dataTypes";
 import styled from 'styled-components';
-import { Table } from '../Table/Table';
 
 interface Props {
     files: File[];
@@ -23,6 +21,7 @@ const FlieListContainer = styled.div`
                 width: 100%;
             }
             div {
+                cursor: pointer;
                 flex: 1 100%;
             }
             button {

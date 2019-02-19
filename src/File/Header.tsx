@@ -50,23 +50,6 @@ const HeaderContainter = styled.header`
             white-space: nowrap;
         }
     }
-
-    .colselect{
-        display: flex;
-        align-items: center;
-        &-select{
-            flex: 1 100%;
-            color: black;
-        }
-        &-title{
-            text-transform: capitalize;
-            font-weight: 500;
-            white-space: nowrap;
-            font-size: 18px;
-            padding-right: 15px;
-            flex: 1 auto;
-        }
-    }
 `;
 
 export class Header extends React.PureComponent<Props, State> {
@@ -103,7 +86,8 @@ export class Header extends React.PureComponent<Props, State> {
     }
 
     private onFileAdd = (file: File) => {
-        this.setState({ files: this.state.files.concat(file) });
+        const callback = (this.state.selectedFileIndex === -1 || this.state.files.length === 0) ? () => this.onFileSelect(0) : undefined;
+        this.setState({ files: this.state.files.concat(file) }, callback);
     }
 
     private onFileSelect = (i: number) => {
@@ -122,7 +106,7 @@ export class Header extends React.PureComponent<Props, State> {
 
     private onFileClear = () => {
         this.props.onFileChange(undefined);
-        this.setState({ files: [] });
+        this.setState({ files: [], selectedFileIndex: -1 });
     }
 
     public render() {

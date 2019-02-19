@@ -8,6 +8,22 @@ import './App.css';
 
 const Container = styled.div`
     width: 100%;
+    .select {
+        display: flex;
+        align-items: center;
+        &-box {
+            flex: 1 100%;
+            color: black;
+        }
+        &-title {
+            flex: 1 auto;
+            text-transform: capitalize;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 18px;
+            padding-right: 15px;
+        }
+    }
 `;
 
 interface Props { }
@@ -85,11 +101,11 @@ class App extends React.PureComponent<Props, State> {
         return (
             <Container>
                 <Header onFileChange={this.onFileChange} />
-                <div className="colselect">
-                    <div className="colselect-title">Col Lists</div>
-                    <div className="colselect-select">
+                <div className="select">
+                    <div className="select-title">Col Lists</div>
+                    <div className="select-box">
                         <Select
-                            classNamePrefix='colselect-select'
+                            classNamePrefix='select-box'
                             options={this.state.cols}
                             value={this.state.selectedCols}
                             onChange={value => { this.setState({ selectedCols: value as DataTypes.SelectOption[] }) }}
