@@ -30,7 +30,7 @@ export class DetailTable extends React.PureComponent<Props> {
                     if (d[1] === null) return this.renderRows(d[0], 'NULL');
                     return this.renderRows(d[0], JSON.stringify(d[1]));
                 case 'number':
-                    return this.renderRows(d[0], (d[1] as number).toLocaleString());
+                    return this.renderRows(d[0], d[1].toLocaleString());
                 case 'string':
                     return this.renderRows(d[0], d[1]);
                 default:
