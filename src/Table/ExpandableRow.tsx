@@ -2,10 +2,11 @@ import * as React from 'react';
 import { DetailTable } from './DetailTable';
 import { InjectedExpandableProps, makeExpandable } from './MakeExpandable';
 
-interface rowProps extends InjectedExpandableProps {
+type rowProps = {
     cols: object[];
     detailData: Array<[string, any]>;
-}
+    onClick?: () => void;
+} & InjectedExpandableProps
 
 const ExpandableRowClass = (props: rowProps) => (
     <>

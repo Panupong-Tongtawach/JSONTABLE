@@ -100,7 +100,7 @@ export class Table extends React.PureComponent<Props> {
 
         return (
             isDataExists ? (
-                <ExpandableRow cols={cols} detailData={detailData} key={key} />
+                <ExpandableRow cols={cols} detailData={detailData} key={key} onClick={() => alert('a')} />
             ) : null);
     }
 

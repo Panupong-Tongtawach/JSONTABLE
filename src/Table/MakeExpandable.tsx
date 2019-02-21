@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Subtract } from 'utility-types';
 
 export interface InjectedExpandableProps {
     onClick(): void;
@@ -10,19 +9,25 @@ interface State {
     isExpand: boolean;
 }
 
-export const makeExpandable = <P extends InjectedExpandableProps>(Component: React.ComponentType<P>) =>
-    class MakeExpandable extends React.PureComponent<Subtract<P, InjectedExpandableProps>, State>{
-        state: State = {
+export function makeExpandable<P>(Component: React.ComponentType<P & InjectedExpandableProps>) {
+    return class extends React.PureComponent<P, State> {
+        public state: State = {
             isExpand: false,
         };
 
-        onClick = () => {
+        public onClick = () => {
             this.setState(prevState => ({ isExpand: !prevState.isExpand }));
         };
 
-        render() {
+        public render() {
+            const { onClick, ...props } = this.props as any;
             return (
-                <Component {...this.props as P} onClick={this.onClick} isExpand={this.state.isExpand} />
+                <Component
+                    {...props}
+                    onClick={() => { onClick && onClick(); this.onClick(); }}
+                    isExpand={this.state.isExpand}
+                />
             );
-        };
+        }
     };
+}
