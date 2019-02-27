@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface InjectedExpandableProps<T extends HTMLElement> {
-    onClick(): React.MouseEventHandler<T>;
+    onClick: React.MouseEventHandler<T>;
     isExpand: boolean;
 }
 
@@ -9,7 +9,7 @@ interface State {
     isExpand: boolean;
 }
 
-export function makeExpandable<P>(Component: React.ComponentType<P & InjectedExpandableProps<HTMLTableRowElement>>) { // TODO
+export function makeExpandable<P>(Component: React.ComponentType<P & InjectedExpandableProps<HTMLElement>>) {
     return class extends React.PureComponent<P, State> {
         public state: State = {
             isExpand: false,
@@ -24,7 +24,7 @@ export function makeExpandable<P>(Component: React.ComponentType<P & InjectedExp
             return (
                 <Component
                     {...props}
-                    onClick={() => { onClick && onClick(); this.onClick(); }}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => { onClick && onClick(e); this.onClick(); }}
                     isExpand={this.state.isExpand}
                 />
             );

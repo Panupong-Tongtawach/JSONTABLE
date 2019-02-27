@@ -2,12 +2,13 @@ import * as React from 'react';
 import { DetailTable } from './DetailTable';
 import { InjectedExpandableProps, makeExpandable } from './MakeExpandable';
 
-type rowProps = {
+export type Props = {
     cols: object[];
     detailData: Array<[string, any]>;
-} & InjectedExpandableProps<HTMLTableRowElement> // TODO
+    onClick?: React.MouseEventHandler<HTMLTableRowElement>;
+} & InjectedExpandableProps<HTMLElement>
 
-const ExpandableRowClass = (props: rowProps) => (
+const ExpandableRowClass = (props: Props) => (
     <>
         <tr className="body_data-row" onClick={props.onClick}>{props.cols.map((c, k) => <td key={k}>{c}</td>)}</tr>
         {props.isExpand ? (
