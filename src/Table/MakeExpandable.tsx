@@ -15,16 +15,17 @@ export function makeExpandable<P>(Component: React.ComponentType<P & InjectedExp
 			isExpand: false,
 		};
 
-		public onClick = () => {
+		public onExpand = () => {
 			this.setState((prevState) => ({ isExpand: !prevState.isExpand }));
 		}
 
 		public render() {
 			const { onClick, ...props } = this.props as any;
+			const onPerformClick = (e: React.MouseEvent<HTMLElement>) => { if (onClick) { onClick(e); } this.onExpand(); };
 			return (
 				<Component
 					{...props}
-					onClick={(e: React.MouseEvent<HTMLElement>) => { onClick && onClick(e); this.onClick(); }}
+					onClick={onPerformClick}
 					isExpand={this.state.isExpand}
 				/>
 			);

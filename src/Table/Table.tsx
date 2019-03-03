@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { isNullOrUndefined } from "util";
-import { DataTypes } from "../dataTypes";
+import { IFile } from "../dataTypes";
 import { ExpandableRow } from "./ExpandableRow";
 
 interface IProps {
-	file?: DataTypes.File;
+	file?: IFile;
 	displayColumn: string[];
 }
 
@@ -75,12 +75,20 @@ export class Table extends React.PureComponent<IProps> {
 
 	private renderHeader = () => {
 		return (
-			<thead><tr>{
-				this.props.displayColumn.length === 0 ?
-					<th children={"Please select display column"} /> :
-					this.props.displayColumn.map((col, i) => (<th key={i} children={col} />))
-			}</tr></thead>
+			<thead>
+				<tr>
+					{this.props.displayColumn.length === 0 ? this.renderBlankHeader() : this.renderColsHeader()}
+				</tr>
+			</thead>
 		);
+	}
+
+	private renderColsHeader = () => {
+		return this.props.displayColumn.map((col, i) => (<th key={i} children={col} />));
+	}
+
+	private renderBlankHeader = () => {
+		return <th>"Please select display column"</th>;
 	}
 
 	private renderFileNameRow = (name: string) => {
@@ -102,7 +110,8 @@ export class Table extends React.PureComponent<IProps> {
 					default:
 						return JSON.stringify(colData);
 				}
-			};
+			}
+
 			isDataExists = isDataExists || !isNullOrUndefined(colData);
 			return colData;
 		});

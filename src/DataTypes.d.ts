@@ -1,23 +1,20 @@
 import { Option } from "react-select/lib/filters";
 
-export module DataTypes {
+export interface IFile {
+	data: object[];
+	name: string;
+}
 
-	interface File {
-		data: object[];
-		name: string;
-	}
+export interface IQuestion {
+	qid: string;
+	index: number;
+	trainingPhrase: string;
+	matched: boolean;
+	intent: string;
+	retry: number;
+}
 
-	interface Question {
-		qid: string;
-		index: number;
-		trainingPhrase: string;
-		matched: boolean;
-		intent: string;
-		retry: number;
-	}
-
-	interface SelectOption {
-		value: string;
-		label: string;
-	}
+export interface ISelectOption {
+	value: string;
+	label: string;
 }

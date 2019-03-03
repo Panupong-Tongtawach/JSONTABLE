@@ -2,7 +2,7 @@ import React from "react";
 import Select from "react-select";
 import styled from "styled-components";
 import "./App.css";
-import { DataTypes } from "./dataTypes";
+import { IFile, ISelectOption } from "./dataTypes";
 import { Header } from "./File/Header";
 import { Table } from "./Table/Table";
 
@@ -27,14 +27,14 @@ const Container = styled.div`
 `;
 
 interface IState {
-	file?: DataTypes.File;
-	cols: DataTypes.SelectOption[];
-	selectedCols: DataTypes.SelectOption[];
+	file?: IFile;
+	cols: ISelectOption[];
+	selectedCols: ISelectOption[];
 }
 
 class App extends React.PureComponent<{}, IState> {
 
-	private defaultFile: DataTypes.File = {
+	private defaultFile: IFile = {
 		data: [
 			/* tslint:disable:max-line-length */
 			{ level: "info", ts: 1547306559.829222, caller: "AnalyseTrainingPharse/analyse_training_pharse.go:62", msg: "Fetch questions success", count: 165, test: null, test2: [1, 2, 3, 999], test3: undefined },
@@ -60,7 +60,7 @@ class App extends React.PureComponent<{}, IState> {
 		name: "default.json",
 	};
 
-	private defaultCols: DataTypes.SelectOption[] = [
+	private defaultCols: ISelectOption[] = [
 		{ value: "level", label: "level" },
 		{ value: "ts", label: "ts" },
 		{ value: "caller", label: "caller" },
@@ -82,6 +82,7 @@ class App extends React.PureComponent<{}, IState> {
 	}
 
 	public render() {
+		const onChange = (value: any) => { this.setState({ selectedCols: value as ISelectOption[] }); };
 		return (
 			<Container>
 				<Header onFileChange={this.onFileChange} />
@@ -92,7 +93,7 @@ class App extends React.PureComponent<{}, IState> {
 							classNamePrefix="select-box"
 							options={this.state.cols}
 							value={this.state.selectedCols}
-							onChange={(value) => { this.setState({ selectedCols: value as DataTypes.SelectOption[] }); }}
+							onChange={onChange}
 							isSearchable={true}
 							isMulti={true}
 						/>
@@ -108,13 +109,13 @@ class App extends React.PureComponent<{}, IState> {
 
 	private getCols = (data: object[]) => {
 		const colSet = new Set<string>(([] as string[]).concat(...data.map((d) => Object.keys(d))));
-		const cols: DataTypes.SelectOption[] = [];
+		const cols: ISelectOption[] = [];
 		colSet.forEach((c) => cols.push({ label: c, value: c }));
 		return cols;
 	}
 
-	private onFileChange = (file?: DataTypes.File) => {
-		let cols: DataTypes.SelectOption[] = [];
+	private onFileChange = (file?: IFile) => {
+		let cols: ISelectOption[] = [];
 		if (file) {
 			cols = this.getCols(file.data);
 		}

@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
-import { DataTypes } from "../dataTypes";
+import { IFile } from "../dataTypes";
 import { FileList } from "./FileList";
 import { FileUploader } from "./FileUploader";
 
 interface IProps {
-	onFileChange: (x?: DataTypes.File) => void;
+	onFileChange: (x?: IFile) => void;
 }
 
 interface IState {

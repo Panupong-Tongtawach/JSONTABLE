@@ -45,17 +45,20 @@ export class FileList extends React.Component<IProps> {
 	public render() {
 		return (
 			<FlieListContainer>
-				{this.props.files.length > 0 ?
-					<table className="table">
-						<tbody>{this.props.files.map((x, i) => this.renderFileRow(x, i))}</tbody>
-					</table> :
-					<div className="nodata">No File</div>
-				}
+				{this.props.files.length > 0 ? this.renderFileList(this.props.files) : <div className="nodata">No File</div>}
 			</FlieListContainer>
 		);
 	}
 
-	private renderFileRow(file: File, index: number) {
+	private renderFileList = (files: File[]) => {
+		return (
+			<table className="table">
+				<tbody>{files.map((x, i) => this.renderFileRow(x, i))}</tbody>
+			</table>
+		);
+	}
+
+	private renderFileRow = (file: File, index: number) => {
 		const onRemove = () => this.props.onFileRemove(index);
 		const onFileSelect = () => this.props.onFileSelect(index);
 		return (
