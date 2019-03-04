@@ -48,6 +48,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
+      "yarn lint --fix",
       "prettier --trailing-comma es5 --single-quote --write",
       "git add"
     ]
