@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-interface IProps {
+interface Props {
   files: File[];
   onFileRemove: (x: number) => void;
   onFileSelect: (x: number) => void;
@@ -40,7 +40,7 @@ const FlieListContainer = styled.div`
   }
 `;
 
-export class FileList extends React.Component<IProps> {
+export class FileList extends React.Component<Props> {
   public render() {
     return (
       <FlieListContainer>

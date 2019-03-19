@@ -17,10 +17,6 @@ export function makeExpandable<P>(
       isExpand: false,
     };
 
-    public onExpand = () => {
-      this.setState(prevState => ({ isExpand: !prevState.isExpand }));
-    };
-
     public render() {
       const { onClick, ...props } = this.props as any;
       const onPerformClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -37,5 +33,9 @@ export function makeExpandable<P>(
         />
       );
     }
+
+    private onExpand = () => {
+      this.setState(prevState => ({ isExpand: !prevState.isExpand }));
+    };
   };
 }

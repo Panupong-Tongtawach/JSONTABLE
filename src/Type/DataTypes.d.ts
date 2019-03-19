@@ -1,10 +1,13 @@
 import { Option } from 'react-select/lib/filters';
-export interface IFile {
-  data: object[];
+
+export interface FileType {
   name: string;
+  data: object[];
 }
 
-export interface IQuestion {
+export type DetailData = [string, any];
+
+export interface Question {
   qid: string;
   index: number;
   trainingPhrase: string;
@@ -13,7 +16,7 @@ export interface IQuestion {
   retry: number;
 }
 
-export interface ISelectOption {
+export interface SelectOption {
   value: string;
   label: string;
 }

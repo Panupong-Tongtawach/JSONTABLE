@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import './App.css';
 import { Header } from './File/Header';
 import { Table } from './Table/Table';
-import { IFile, ISelectOption } from './Type/DataTypes';
+import { FileType, SelectOption } from './Type/DataTypes';
 
 const Container = styled.div`
   width: 100%;
@@ -27,15 +27,14 @@ const Container = styled.div`
 `;
 
 interface IState {
-  file?: IFile;
-  cols: ISelectOption[];
-  selectedCols: ISelectOption[];
+  file?: FileType;
+  cols: SelectOption[];
+  selectedCols: SelectOption[];
 }
 
 class App extends React.PureComponent<{}, IState> {
-  private defaultFile: IFile = {
+  private defaultFile: FileType = {
     data: [
-      /* tslint:disable:max-line-length */
       {
         level: 'info',
         ts: 1547306559.829222,
@@ -300,7 +299,7 @@ class App extends React.PureComponent<{}, IState> {
     name: 'default.json',
   };
 
-  private defaultCols: ISelectOption[] = [
+  private defaultCols: SelectOption[] = [
     { value: 'level', label: 'level' },
     { value: 'ts', label: 'ts' },
     { value: 'caller', label: 'caller' },
@@ -312,7 +311,7 @@ class App extends React.PureComponent<{}, IState> {
     { value: 'test3', label: 'test3' },
   ];
 
-  public constructor(props: {}) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       cols: this.defaultCols,
@@ -323,7 +322,7 @@ class App extends React.PureComponent<{}, IState> {
 
   public render() {
     const onChange = (value: any) => {
-      this.setState({ selectedCols: value as ISelectOption[] });
+      this.setState({ selectedCols: value as SelectOption[] });
     };
     return (
       <Container>
@@ -353,13 +352,13 @@ class App extends React.PureComponent<{}, IState> {
     const colSet = new Set<string>(
       ([] as string[]).concat(...data.map(d => Object.keys(d)))
     );
-    const cols: ISelectOption[] = [];
+    const cols: SelectOption[] = [];
     colSet.forEach(c => cols.push({ label: c, value: c }));
     return cols;
   };
 
-  private onFileChange = (file?: IFile) => {
-    let cols: ISelectOption[] = [];
+  private onFileChange = (file?: FileType) => {
+    let cols: SelectOption[] = [];
     if (file) {
       cols = this.getCols(file.data);
     }

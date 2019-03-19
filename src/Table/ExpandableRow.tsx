@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { DetailData } from '../Type/DataTypes';
 import { DetailTable } from './DetailTable';
 import { InjectedExpandableProps, makeExpandable } from './MakeExpandable';
 
 export type Props = {
   cols: object[];
-  detailData: Array<[string, any]>;
+  detailData: DetailData[];
   onClick?: React.MouseEventHandler<HTMLTableRowElement>;
 } & InjectedExpandableProps<HTMLElement>;
 

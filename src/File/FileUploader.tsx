@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-interface IProps {
+interface Props {
   onFileAdd: (x: File) => void;
 }
 
@@ -32,8 +32,8 @@ const FileUploaderWrapper = styled.div`
   }
 `;
 
-export class FileUploader extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
+export class FileUploader extends React.PureComponent<Props> {
+  constructor(props: Props) {
     super(props);
   }
 

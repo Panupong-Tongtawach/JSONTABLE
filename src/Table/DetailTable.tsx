@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { DetailData } from '../Type/DataTypes';
 
 const DetailTableWrapper = styled.div`
   width: 100%;
@@ -11,14 +12,12 @@ const DetailTableWrapper = styled.div`
   }
 `;
 
-type Data = [string, any];
-
-interface IProps {
-  data: Data[];
+interface Props {
+  data: DetailData[];
 }
 
-export class DetailTable extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
+export class DetailTable extends React.PureComponent<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
@@ -32,7 +31,7 @@ export class DetailTable extends React.PureComponent<IProps> {
     );
   }
 
-  private getRows = (data: Data[]) => {
+  private getRows = (data: DetailData[]) => {
     return data.map(d => {
       switch (typeof d[1]) {
         case 'object':

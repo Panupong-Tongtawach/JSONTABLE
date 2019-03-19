@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { isNullOrUndefined } from 'util';
-import { IFile } from '../dataTypes';
+import { FileType } from '../Type/DataTypes';
 import { ExpandableRow } from './ExpandableRow';
 
-interface IProps {
-  file?: IFile;
+interface Props {
+  file?: FileType;
   displayColumn: string[];
 }
 
@@ -62,7 +62,7 @@ const MainTable = styled.table`
   }
 `;
 
-export class Table extends React.PureComponent<IProps> {
+export class Table extends React.PureComponent<Props> {
   public render() {
     return (
       <MainTable>

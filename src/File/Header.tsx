@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { IFile } from '../Type/DataTypes';
+import { FileType } from '../Type/DataTypes';
 import { FileList } from './FileList';
 import { FileUploader } from './FileUploader';
 
-interface IProps {
-  onFileChange: (x?: IFile) => void;
+interface Props {
+  onFileChange: (x?: FileType) => void;
 }
 
-interface IState {
+interface State {
   files: File[];
   selectedFileIndex: number;
 }
@@ -52,11 +52,11 @@ const HeaderContainter = styled.header`
   }
 `;
 
-export class Header extends React.PureComponent<IProps, IState> {
+export class Header extends React.PureComponent<Props, State> {
   private reader: FileReader;
   private selectedFileName: string;
 
-  public constructor(props: IProps) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       files: [],
