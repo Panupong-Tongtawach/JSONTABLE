@@ -1,12 +1,18 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-react"
-    ],
-    "jsRules": {},
-    "rules": {
-        "indent": [true, "tabs", 2]
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": ["config/**/*.js", "node_modules/**/*.ts"]
+  },
+  "rules": {
+    "no-console": {
+      "severity": "warning",
+      "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
     },
-    "rulesDirectory": []
+    "interface-name": false,
+    "no-namespace": false,
+    "eofline": true,
+    "quotemark": [true, "single", "jsx-double"],
+    "trailing-comma": true,
+    "object-literal-sort-keys": false
+  }
 }
