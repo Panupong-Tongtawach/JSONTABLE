@@ -1,36 +1,33 @@
-import { PureComponent, ReactElement } from 'react';
+import * as React from 'react';
+import { DetailData } from '../Type/DataTypes';
+import { DetailTable } from './DetailTable';
+import { InjectedExpandableProps, makeExpandable } from './MakeExpandable';
 
-interface Props {
-  cols: string[];
-  expandElement: ReactElement<HTMLDivElement>;
-}
+export type Props = {
+  cols: object[];
+  detailData: DetailData[];
+  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
+} & InjectedExpandableProps<HTMLElement>;
 
-interface States {
-  isExpand: boolean;
-}
+const ExpandableRowClass = (props: Props) => (
+  <>
+    <tr className="body_data-row" onClick={props.onClick}>
+      {props.cols.map((c, k) => (
+        <td key={k}>{c}</td>
+      ))}
+    </tr>
+    {props.isExpand ? renderExpandedTable(props.detailData) : null}
+  </>
+);
 
-// TODO: In progress...
+const renderExpandedTable = (data: Array<[string, any]>) => {
+  return (
+    <tr className="body_data-detailrow">
+      <td colSpan={1000}>
+        <DetailTable data={data} />
+      </td>
+    </tr>
+  );
+};
 
-export class ExpandableRow extends PureComponent<Props, States> {
-  constructor(props: Props, states: States) {
-    super(props);
-    this.state = { isExpand: false };
-  }
-
-  public render() {
-    return (
-      <>
-        <tr onClick={this.onRowClick}>
-          {this.props.cols.map((col, k) => (
-            <td key={k}>{col}</td>
-          ))}
-        </tr>
-        <td>{this.props.expandElement}</td>
-      </>
-    );
-  }
-
-  private onRowClick() {
-    this.setState({ isExpand: !this.state.isExpand });
-  }
-}
+export const ExpandableRow = makeExpandable(ExpandableRowClass);

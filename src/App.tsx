@@ -1,91 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Select from 'react-select';
-import { ValueType } from 'react-select/lib/types';
 import styled from 'styled-components';
 import './App.css';
-import { DataTypes } from './DataTypes';
-import { FileList } from './File/FileList';
-import { FileUploader } from './File/FileUploader';
+import { Header } from './File/Header';
 import { Table } from './Table/Table';
-
-const TableContainer = styled.div`
-  width: 100%;
-`;
+import { FileType, SelectOption } from './Type/DataTypes';
 
 const Container = styled.div`
-  *:focus {
-    outline: none;
-  }
   width: 100%;
-`;
-
-const Header = styled.header`
-  z-index: 3;
-  margin: 15px 30px;
-
-  .title {
-    font-size: 24px;
-    padding: 10px 0;
-    font-weight: 600;
-  }
-
-  .file {
-    margin-bottom: 15px;
-    &-grid {
-      display: grid;
-      margin-top: 15px;
-      grid-gap: 10px;
-      grid-template: 100px auto/1fr 5fr;
-      grid-template-areas:
-        'l rt'
-        'l rb';
-    }
-    &-upload {
-      grid-area: l;
-    }
-    &-list {
-      grid-area: rt;
-      overflow-y: scroll;
-    }
-    &-clear {
-      grid-area: rb;
-    }
-    &-title {
-      font-size: 18px;
-      text-transform: uppercase;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-  }
-
-  .colselect {
+  .select {
     display: flex;
     align-items: center;
-    &-select {
+    &-box {
       flex: 1 100%;
+      color: black;
     }
     &-title {
-      text-transform: uppercase;
-      font-weight: 500;
+      flex: 1 auto;
+      text-transform: capitalize;
       white-space: nowrap;
+      font-weight: 500;
       font-size: 18px;
       padding-right: 15px;
-      flex: 1 auto;
     }
   }
 `;
 
-interface States {
-  currentID: number;
-  files: DataTypes.File[];
-  colsAvaliable: DataTypes.SelectOption[];
-  colsSelected: DataTypes.SelectOption[];
+interface IState {
+  file?: FileType;
+  cols: SelectOption[];
+  selectedCols: SelectOption[];
 }
 
-class App extends Component<{}, States> {
-  private defaultFiles: DataTypes.File = {
-    name: 'default.json',
-    id: 0,
+class App extends React.PureComponent<{}, IState> {
+  private defaultFile: FileType = {
     data: [
       {
         level: 'info',
@@ -348,112 +296,74 @@ class App extends Component<{}, States> {
         },
       },
     ],
+    name: 'default.json',
   };
+
+  private defaultCols: SelectOption[] = [
+    { value: 'level', label: 'level' },
+    { value: 'ts', label: 'ts' },
+    { value: 'caller', label: 'caller' },
+    { value: 'msg', label: 'msg' },
+    { value: 'question', label: 'question' },
+    { value: 'count', label: 'count' },
+    { value: 'test', label: 'test' },
+    { value: 'test2', label: 'test2' },
+    { value: 'test3', label: 'test3' },
+  ];
+
   constructor(props: {}) {
     super(props);
     this.state = {
-      currentID: 0,
-      files: [],
-      colsAvaliable: [],
-      colsSelected: [],
+      cols: this.defaultCols,
+      file: this.defaultFile,
+      selectedCols: [],
     };
   }
 
-  public componentDidMount() {
-    // Add demo file
-    this.onFileReceive(this.defaultFiles);
-  }
-
   public render() {
+    const onChange = (value: any) => {
+      this.setState({ selectedCols: value as SelectOption[] });
+    };
     return (
       <Container>
-        <Header>
-          <div className="file">
-            <div className="file-title">File Lists</div>
-            <div className="file-grid">
-              <div className="file-upload">
-                <FileUploader onAddFile={this.onFileReceive} />
-              </div>
-              <div className="file-list">
-                <FileList
-                  files={this.state.files}
-                  onFileRemove={this.onFileRemove}
-                />
-              </div>
-              <button
-                className="file-clear"
-                onClick={this.onClearAll}
-                children="Clear"
-              />
-            </div>
+        <Header onFileChange={this.onFileChange} />
+        <div className="select">
+          <div className="select-title">Col Lists</div>
+          <div className="select-box">
+            <Select
+              classNamePrefix="select-box"
+              options={this.state.cols}
+              value={this.state.selectedCols}
+              onChange={onChange}
+              isSearchable={true}
+              isMulti={true}
+            />
           </div>
-          <div className="colselect">
-            <div className="colselect-title">Col Lists</div>
-            <div className="colselect-select">
-              <Select
-                options={this.state.colsAvaliable}
-                value={this.state.colsSelected}
-                onChange={this.onSelectColsChange}
-                isSearchable={true}
-                isMulti={true}
-              />
-            </div>
-          </div>
-        </Header>
-        <TableContainer>
-          <Table
-            data={this.state.files}
-            displayColumn={this.state.colsSelected.map(x => x.value)}
-          />
-        </TableContainer>
+        </div>
+        <Table
+          file={this.state.file}
+          displayColumn={this.state.selectedCols.map(x => x.value)}
+        />
       </Container>
     );
   }
 
-  private avaliableCols = (files: DataTypes.File[]) => {
-    const data = files.map(f => f.data).reduce((x, d) => x.concat(d), []);
+  private getCols = (data: object[]) => {
     const colSet = new Set<string>(
-      data.map(d => Object.keys(d)).reduce((x, y) => x.concat(y), [])
+      ([] as string[]).concat(...data.map(d => Object.keys(d)))
     );
-    const cols: DataTypes.SelectOption[] = [];
+    const cols: SelectOption[] = [];
     colSet.forEach(c => cols.push({ label: c, value: c }));
     return cols;
   };
 
-  private onFileReceive = (file: DataTypes.File) => {
-    const currentID = this.state.currentID + 1;
-    const files = this.state.files.concat({ ...file, id: currentID });
-    this.setState({
-      files,
-      currentID,
-      colsAvaliable: this.avaliableCols([...this.state.files, file]),
-    });
-  };
-
-  private onFileRemove = (id: number) => {
-    const newFiles = this.state.files.filter(x => id !== x.id);
-    const newAvaCols = this.avaliableCols(newFiles);
-    const newSelCols = this.state.colsSelected.filter(
-      x => newAvaCols.findIndex(y => y.value === x.value) > 0
-    );
-    this.setState({
-      files: newFiles,
-      colsAvaliable: newAvaCols,
-      colsSelected: newSelCols,
-    });
-  };
-
-  private onSelectColsChange = (value: ValueType<DataTypes.SelectOption>) => {
-    this.setState({ colsSelected: value as DataTypes.SelectOption[] });
-  };
-
-  private onClearAll = (e: React.FormEvent<HTMLButtonElement>) => {
-    this.setState({
-      files: [],
-      currentID: -1,
-      colsAvaliable: [],
-      colsSelected: [],
-    });
+  private onFileChange = (file?: FileType) => {
+    let cols: SelectOption[] = [];
+    if (file) {
+      cols = this.getCols(file.data);
+    }
+    this.setState({ file, cols, selectedCols: [] });
   };
 }
+
 export default App;

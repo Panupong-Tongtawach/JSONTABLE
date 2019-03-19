@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { isNullOrUndefined } from 'util';
-import { DataTypes } from '../DataTypes';
+import { FileType } from '../Type/DataTypes';
+import { ExpandableRow } from './ExpandableRow';
 
 interface Props {
-  data: DataTypes.File[];
+  file?: FileType;
   displayColumn: string[];
 }
 
@@ -12,15 +13,18 @@ const MainTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  color: white;
+  font-size: 15px;
+
   thead {
     z-index: 2;
     text-transform: uppercase;
-    color: #00ad5f;
+    color: #fa0000;
     font-size: 15px;
     font-weight: bold;
 
     th {
-      background-color: #101010;
+      background-color: black;
       min-width: 50px;
       position: sticky;
       padding: 20px 10px;
@@ -28,32 +32,32 @@ const MainTable = styled.table`
     }
   }
 
-  tbody {
-    color: white;
-    font-size: 15px;
-    td {
-      padding: 10px;
-      vertical-align: top;
-    }
-
-    tr:nth-child(odd) {
-      background-color: #252525;
-      &.filename {
-        background-color: black;
+  .body {
+    &_file-name {
+      background-color: #131313;
+      color: #909090;
+      font-size: 17px;
+      font-weight: 500;
+      font-style: italic;
+      td {
+        padding: 7px 15px;
       }
     }
-    tr:nth-child(even) {
-      background-color: #202020;
-    }
-  }
-  .filename {
-    color: #909090;
-    column-span: all;
-    font-size: 17px;
-    font-weight: 500;
-    td {
-      padding: 7px 15px;
-      font-style: italic;
+
+    &_data {
+      &-row:nth-child(odd) {
+        background-color: #252525;
+      }
+      &-row:nth-child(even) {
+        background-color: #202020;
+      }
+      &-detailrow {
+        background-color: #303030;
+      }
+      td {
+        padding: 10px;
+        vertical-align: top;
+      }
     }
   }
 `;
@@ -62,91 +66,80 @@ export class Table extends React.PureComponent<Props> {
   public render() {
     return (
       <MainTable>
-        {this.renderHeaderRow()}
+        {this.renderHeader()}
         {this.renderRows()}
       </MainTable>
     );
   }
 
-  private renderHeaderRow() {
+  private renderHeader = () => {
     return (
       <thead>
         <tr>
-          {this.props.displayColumn.length === 0 ? (
-            <th children={'Please select display column'} />
-          ) : (
-            this.props.displayColumn.map((col, k) => (
-              <th children={col} key={k} />
-            ))
-          )}
+          {this.props.displayColumn.length === 0
+            ? this.renderBlankHeader()
+            : this.renderColsHeader()}
         </tr>
       </thead>
     );
-  }
+  };
 
-  private renderFileNameRow(name: string) {
+  private renderColsHeader = () => {
+    return this.props.displayColumn.map((col, i) => (
+      <th key={i} children={col} />
+    ));
+  };
+
+  private renderBlankHeader = () => {
+    return <th>"Please select display column"</th>;
+  };
+
+  private renderFileNameRow = (name: string) => {
     return (
-      <tr className="filename">
-        <td colSpan={100}>{name}</td>
+      <tr>
+        <td colSpan={1000}>{name}</td>
       </tr>
     );
-  }
+  };
 
-  private renderFileDataRow(data: any) {
+  private renderFileDataRow = (data: any, key: number) => {
     let isDataExists = false;
+    const detailData: Array<[string, any]> = this.props.displayColumn.map(
+      k => [k, data[k]] as [string, any]
+    );
 
-    const cols = this.props.displayColumn.map(key => {
-      const col = data[key];
-      if (typeof col === 'object') {
+    const cols = this.props.displayColumn.map(k => {
+      const colData = data[k];
+
+      if (typeof colData === 'object') {
         isDataExists = true;
-        switch (col) {
+        switch (colData) {
           case null:
             return 'null';
           default:
-            return this.renderObjectTable(data[key]);
+            return JSON.stringify(colData);
         }
       }
-      isDataExists = isDataExists || !isNullOrUndefined(data[key]);
-      return data[key];
+
+      isDataExists = isDataExists || !isNullOrUndefined(colData);
+      return colData;
     });
 
     return isDataExists ? (
-      <tr>
-        {cols.map((c, k) => (
-          <td key={k}>{c}</td>
-        ))}
-      </tr>
+      <ExpandableRow cols={cols} detailData={detailData} key={key} />
     ) : null;
-  }
-
-  private renderObjectTable(object: any): any {
-    return (
-      <MainTable>
-        {Object.keys(object).map((key: any) => {
-          switch (typeof object[key]) {
-            case 'object':
-              return <td>{this.renderObjectTable(object[key])}</td>;
-            default:
-              return (
-                <tr>
-                  <td>{key}</td>
-                  <td>{object[key]}</td>
-                </tr>
-              );
-          }
-        })}
-      </MainTable>
-    );
-  }
+  };
 
   private renderRows() {
-    return this.props.data.map((file, i) => {
-      return (
-        <React.Fragment key={i}>
-          <tbody>{this.renderFileNameRow(file.name)}</tbody>
-          <tbody>{file.data.map(data => this.renderFileDataRow(data))}</tbody>
-        </React.Fragment>
-      );
-    });
+    return this.props.file ? (
+      <>
+        <tbody className="body_file-name">
+          {this.renderFileNameRow(this.props.file.name)}
+        </tbody>
+        <tbody className="body_data">
+          {this.props.file.data.map((d, i) => this.renderFileDataRow(d, i))}
+        </tbody>
+      </>
+    ) : null;
   }
 }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { DataTypes } from '../DataTypes';
 
 interface Props {
-  files: DataTypes.File[];
+  files: File[];
   onFileRemove: (x: number) => void;
+  onFileSelect: (x: number) => void;
 }
 
 const FlieListContainer = styled.div`
@@ -12,8 +12,22 @@ const FlieListContainer = styled.div`
   height: 100%;
 
   .table {
-    display: grid;
-    grid-template-columns: 1fr min-content;
+    width: 100%;
+    padding: 0 10px;
+    .row {
+      td {
+        display: flex;
+        grid-template-columns: 1fr min-content;
+        width: 100%;
+      }
+      div {
+        cursor: pointer;
+        flex: 1 100%;
+      }
+      button {
+        flex: 1 auto;
+      }
+    }
   }
 
   .nodata {
@@ -31,9 +45,7 @@ export class FileList extends React.Component<Props> {
     return (
       <FlieListContainer>
         {this.props.files.length > 0 ? (
-          <div className="table">
-            {this.props.files.map(x => this.renderFileRow(x))}
-          </div>
+          this.renderFileList(this.props.files)
         ) : (
           <div className="nodata">No File</div>
         )}
@@ -41,13 +53,24 @@ export class FileList extends React.Component<Props> {
     );
   }
 
-  private renderFileRow(file: DataTypes.File) {
-    const onRemoveClick = () => this.props.onFileRemove(file.id);
+  private renderFileList = (files: File[]) => {
     return (
-      <React.Fragment key={file.id}>
-        <div>{file.name}</div>
-        <button onClick={onRemoveClick} children="✕" />
-      </React.Fragment>
+      <table className="table">
+        <tbody>{files.map((x, i) => this.renderFileRow(x, i))}</tbody>
+      </table>
     );
-  }
+  };
+
+  private renderFileRow = (file: File, index: number) => {
+    const onRemove = () => this.props.onFileRemove(index);
+    const onFileSelect = () => this.props.onFileSelect(index);
+    return (
+      <tr className="row" key={index}>
+        <td>
+          <div onClick={onFileSelect}>{file.name}</div>
+          <button onClick={onRemove}>✕</button>
+        </td>
+      </tr>
+    );
+  };
 }

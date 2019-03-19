@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "https://Panupong-Tongtawach.github.io/JSONTABLE/",
   "dependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "react-scripts": "2.1.3",
     "react-select": "^2.2.0",
     "styled-components": "^4.1.3"
