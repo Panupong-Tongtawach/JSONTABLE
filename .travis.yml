@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - '11.10.1'
+cache:
+  directories:
+    - node_modules
+script:
+  - CI=true react-scripts test --env=jsdom
+  - yarn build
+  - yarn lint
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: 57ce8dacb07d1d823295f692e9f504c357fa9745
+  keep-history: true
+  on:
+    branch: master

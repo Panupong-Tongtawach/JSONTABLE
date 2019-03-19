@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import styled from 'styled-components';
 import './App.css';
-import { DataTypes } from './dataTypes';
+import { DataTypes } from './DataTypes';
 import { FileList } from './File/FileList';
 import { FileUploader } from './File/FileUploader';
 import { Table } from './Table/Table';
